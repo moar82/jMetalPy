@@ -1,4 +1,4 @@
-from math import pi, cos, sin
+from math import pi, cos
 
 from jmetal.core.problem import BinaryProblem
 from jmetal.core.solution import BinarySolution

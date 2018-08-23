@@ -26,7 +26,7 @@ class Solution(Generic[S]):
 
 
 class BinarySolution(Solution[BitSet]):
-    """ Class representing float solutions """
+    """ Class representing binary solutions """
 
     def __init__(self, number_of_variables: int, number_of_objectives: int, number_of_constraints=0):
         super(BinarySolution, self).__init__(number_of_variables, number_of_objectives, number_of_constraints)

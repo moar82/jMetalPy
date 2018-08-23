@@ -23,5 +23,12 @@ class ScriptFeaturesTestCases (unittest.TestCase):
         individual_B = self.sf.get_random_individual()
         self.assertNotEqual(individual_A,individual_B)
 
+    def test_return_base_individual(self):
+        self.sf.read_features_file()
+        bi = self.sf.get_base_individual()
+        ''' This base individual was generated from confOpt.csv'''
+        bioracle = [False,True,False,True,False,False,False,False,False,True,True,False,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,False,True,True,True,True,False,False,False]
+        self.assertEqual(bi,bioracle)
+
 if __name__ == '__main__':
     unittest.main()
