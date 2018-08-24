@@ -1,10 +1,37 @@
 import unittest
 from unittest import mock
 from script_features import ScriptFeatures
+from js_engine_helper import BenchmarkConfiguration
 import os
 
+
+class BenchmarkConfigurationTestCases (unittest.TestCase):
+
+    def setUp(self):
+        '''Delete any configuration file'''
+        os.system('rm -f config.ini')
+
+    def tearDown(self):
+        '''Delete any configuration file'''
+        os.system('rm -f config.ini')
+
+    def test_should_constructor_create_a_non_null_object(self):
+        bc = BenchmarkConfiguration()
+        self.assertIsNotNone(bc)
+
+    def test_create_default_configuration_file(self):
+        bc = BenchmarkConfiguration()
+        self.assertTrue(os.path.isfile('config.ini'))
+    def test_read_configuration_file(self):
+        bc = BenchmarkConfiguration()
+        self.assertIsNotNone(bc.filewithfeatures)
+
+
 class ScriptFeaturesTestCases (unittest.TestCase):
-    sf = ScriptFeatures("..")
+
+    def setUp(self):
+        self.sf = ScriptFeatures("..")
+
     def test_should_constructor_create_a_non_null_object(self):
         self.assertIsNotNone(self.sf)
 
@@ -29,6 +56,7 @@ class ScriptFeaturesTestCases (unittest.TestCase):
         ''' This base individual was generated from confOpt.csv'''
         bioracle = [False,True,False,True,False,False,False,False,False,True,True,False,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,False,True,True,True,True,False,False,False]
         self.assertEqual(bi,bioracle)
+
 
 if __name__ == '__main__':
     unittest.main()
