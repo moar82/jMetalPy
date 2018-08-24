@@ -27,7 +27,7 @@ class ProgramLog():
 
     def __init__(self, cwd: str, experiment_name: str) -> None:
         super().__init__()
-        logFile = cwd+"/benchmark_" + experiment_name +".log"
+        self.logFile = cwd+"/benchmark_" + experiment_name +".log"
 
     def logError (self, logmessage: str):
         flog = open (self.logFile,"a")
@@ -37,7 +37,9 @@ class ProgramLog():
 
 
 class BenchmarkConfiguration ():
-    ''' Here we read the configuration from a text file'''
+    ''' Here we read the configuration from a text file
+        TODO: Add the properties of each device:memory capacity, storage capacity
+        '''
     def __init__(self) -> None:
         super().__init__()
         '''if there is not  configuration file we create a new one'''
@@ -119,6 +121,17 @@ class JSEngineHelper ():
         if asolution[71]==False or asolution[72]==False:
             asolution[71] = False
             asolution[72] = False
+        # f16 requires f20 to be false
+        if (asolution[15] & asolution[19])==False:
+            asolution[15] = False
+            asolution[19] = False
+        # f17 requires f21 to be false
+        if (asolution[16] & asolution[20])==False:
+            asolution[16] = False
+            asolution[20] = False
+        #f24 has to be activated as it conflicts with other unknown features
+        if asolution[23]==False:
+            asolution[23] = True
         return asolution
         """ pending to evaluate a bit solution """
 

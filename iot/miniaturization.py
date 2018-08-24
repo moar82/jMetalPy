@@ -1,8 +1,7 @@
-from math import pi, cos
-
 from jmetal.core.problem import BinaryProblem
 from jmetal.core.solution import BinarySolution
 from script_features import ScriptFeatures
+from statistics import median
 """
 .. module:: miniaturization
    :platform: Unix, Windows
@@ -38,37 +37,41 @@ class Miniaturization(BinaryProblem):
 
         ##call the function to open the configuration file, and store it in the map
         ##to generate the initial solutions
-        self.sf = ScriptFeatures()
+        self.sf = ScriptFeatures('')
         self.sf.read_features_file()
 
 
     def evaluate(self, solution: BinarySolution) -> BinarySolution:
-        k = self.number_of_variables - self.number_of_objectives + 1
+        ''' First repair the solution that could have been corrupted through the
+            transformation operators'''
+        repaired_solution = self.sf.js_engine_helper.repair_solution(solution.variables[0])
+        solution.variables[0] = repaired_solution
+        ppm = self.sf.js_engine_helper.evaluate_solution_performance_(solution.variables[0])
 
-        g = sum([(x - 0.5) * (x - 0.5) - cos(20.0 * pi * (x - 0.5))
-                 for x in solution.variables[self.number_of_variables - k:]])
+        '''TODO: Add the DSR evaluation of the properties of each device'''
 
-        g = 100 * (k + g)
-
-        solution.objectives = [(1.0 + g) * 0.5] * self.number_of_objectives
-
-        for i in range(self.number_of_objectives):
-            for j in range(self.number_of_objectives - (i + 1)):
-                solution.objectives[i] *= solution.variables[j]
-
-            if i != 0:
-                solution.objectives[i] *= 1 - solution.variables[self.number_of_objectives - (i + 1)]
+        '''We normalize the code with the original measurements '''
+        solution.objectives[0] = self.__compute_delta\
+            (self.sf.bc.file_size_org,ppm.code_size[0])#this does not vary through executions
+        solution.objectives[1] = self.__compute_delta\
+            (self.sf.bc.mem_us_org,ppm.memory_us[0])  #this does not vary through executions
+        median_execution_time = median(ppm.execution_time)
+        solution.objectives[2] = self.__compute_delta\
+            (self.sf.bc.use_time_avg,median_execution_time)
 
         return solution
 
     def get_name(self):
         return 'Miniaturization'
 
+    def __compute_delta (self,org:float, measured: float) -> float:
+        return (measured-org)/org
+
     def create_solution(self) -> BinarySolution:
 
-        new_solution = BinarySolution(self.number_of_variables, self.number_of_objectives, self.number_of_constraints,
-                                     self.lower_bound, self.upper_bound)
+        new_solution = BinarySolution(self.number_of_variables, self.number_of_objectives, self.number_of_constraints)
         new_solution.variables = \
             [self.sf.get_random_individual() for i in range(self.number_of_variables)]
-
+        repaired_solution = self.sf.js_engine_helper.repair_solution(new_solution.variables[0])
+        new_solution.variables[0] = repaired_solution
         return new_solution

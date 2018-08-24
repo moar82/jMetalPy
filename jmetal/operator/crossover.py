@@ -110,7 +110,7 @@ class SBX(Crossover[FloatSolution, FloatSolution]):
 
 
 class SP(Crossover[BinarySolution, BinarySolution]):
-
+    ''' SP = Single-Point Crossover operator'''
     def __init__(self, probability: float):
         super(SP, self).__init__(probability=probability)
 
