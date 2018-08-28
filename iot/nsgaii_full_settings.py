@@ -10,8 +10,8 @@ if __name__ == '__main__':
 
     algorithm = NSGAII(
         problem=problem,
-        population_size=100,
-        max_evaluations=25000,
+        population_size=10,
+        max_evaluations=250,
         mutation=BitFlip(probability=0.04), #use the same values that in MoMS
         crossover=SP(probability=0.9),#use the same values that in MoMS
         selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator())

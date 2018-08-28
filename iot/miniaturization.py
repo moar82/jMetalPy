@@ -46,19 +46,24 @@ class Miniaturization(BinaryProblem):
             transformation operators'''
         repaired_solution = self.sf.js_engine_helper.repair_solution(solution.variables[0])
         solution.variables[0] = repaired_solution
+        solution_evaluated = False
         ppm = self.sf.js_engine_helper.evaluate_solution_performance_(solution.variables[0])
 
         '''TODO: Add the DSR evaluation of the properties of each device'''
-
-        '''We normalize the code with the original measurements '''
-        solution.objectives[0] = self.__compute_delta\
-            (self.sf.bc.file_size_org,ppm.code_size[0])#this does not vary through executions
-        solution.objectives[1] = self.__compute_delta\
-            (self.sf.bc.mem_us_org,ppm.memory_us[0])  #this does not vary through executions
-        median_execution_time = median(ppm.execution_time)
-        solution.objectives[2] = self.__compute_delta\
-            (self.sf.bc.use_time_avg,median_execution_time)
-
+        if ppm.memory_us[0]<float('inf'):
+            '''We normalize the code with the original measurements '''
+            solution.objectives[0] = self.__compute_delta\
+                (self.sf.bc.file_size_org,ppm.code_size[0])#this does not vary through executions
+            solution.objectives[1] = self.__compute_delta\
+                (self.sf.bc.mem_us_org,ppm.memory_us[0])  #this does not vary through executions
+            median_execution_time = median(ppm.execution_time)
+            solution.objectives[2] = self.__compute_delta\
+                (self.sf.bc.use_time_avg,median_execution_time)
+        else:
+            '''we penalized the solution since it broke the execution'''
+            solution.objectives[0] = float('inf')
+            solution.objectives[1] = float('inf')
+            solution.objectives[2] = float('inf')
         return solution
 
     def get_name(self):
@@ -72,6 +77,4 @@ class Miniaturization(BinaryProblem):
         new_solution = BinarySolution(self.number_of_variables, self.number_of_objectives, self.number_of_constraints)
         new_solution.variables = \
             [self.sf.get_random_individual() for i in range(self.number_of_variables)]
-        repaired_solution = self.sf.js_engine_helper.repair_solution(new_solution.variables[0])
-        new_solution.variables[0] = repaired_solution
         return new_solution

@@ -145,6 +145,7 @@ class GenerationalGeneticAlgorithm(EvolutionaryAlgorithm[S, R]):
         population = []
 
         for i in range(self.population_size):
+            print ('%i Individual created' %i)
             population.append(self.problem.create_solution())
 
         return population

@@ -99,14 +99,12 @@ class JSEngineHelper ():
             applying transformation operators"""
 
         # f7-f10 requires to be disable together (one-index-based)
-        if asolution[6]==False or asolution[7]==False or asolution[8]==False \
-                or asolution[9]==False or asolution[10]==False or asolution[11]==False:
-            asolution[6] = False
-            asolution[7] = False
-            asolution[8] = False
+        if asolution[6]==True or asolution[7]==True or asolution[8]==True:
+            asolution = self.defaultSolution.copy()
+            asolution[6] = True
+            asolution[7] = True
+            asolution[8] = True
             asolution[9] = False
-            asolution[10] = False
-            asolution[11] = False
 
         # f14 requires f11 to be disable too (one-index-based)
         if asolution[13]==False:
@@ -129,11 +127,14 @@ class JSEngineHelper ():
         if (asolution[16] & asolution[20])==False:
             asolution[16] = False
             asolution[20] = False
-        #f24 has to be activated as it conflicts with other unknown features
-        if asolution[23]==False:
-            asolution[23] = True
+        #f31 requires f24 to be deactivated as well
+        if asolution[30]==False:
+            asolution[23] = False
+        # f24 requires f30 to be deactivated as well
+        if asolution[23] == False:
+            asolution[29] = False
         return asolution
-        """ pending to evaluate a bit solution """
+
 
     def evaluate_solution_performance_(self, asolution):
         '''Find the positions in which asolution differs from default solution'''
@@ -201,11 +202,11 @@ class JSEngineHelper ():
             print  (coltemp)
             try:
                 ppm.memory_us.append(float(coltemp[0].replace("\"", "").strip()))
-                parsed = True
             except:
                 self.plog.logError("When executing program: " + self.bc.program + ". configuration file: " + fileoutname + ". errorMsg: " +
                                    coltemp[0].replace("\"", "").strip() + "\n")
-                continue
+                ppm.memory_us.append  (float('inf'))
+                break
             ppm.execution_time.append(float(coltemp[1].replace("\"","").strip()))
         os.chdir(self.cwd) #always return to the original path
         return ppm
