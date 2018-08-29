@@ -1,5 +1,5 @@
 import configparser
-import sys,  os, subprocess
+import sys,  os, subprocess, csv
 from collections import deque
 
 """
@@ -46,6 +46,8 @@ class BenchmarkConfiguration ():
         if os.path.isfile('config.ini') == False:
             self.create_default_configuration_file()
         self.read_configuration_file()
+        self.devices = []
+        self.read_USR_file()
     def create_default_configuration_file(self):
         config = configparser.ConfigParser()
         config['JS.FEATURES'] = {'filewithfeatures':'confOpt.csv'}
@@ -59,7 +61,8 @@ class BenchmarkConfiguration ():
                                      }
         config['DEFAULT.PERFORMANCE.MEASUREMENTS'] = {'file_size': '555896.00',
                                      'mem_us': '104816.00',
-                                     'use_time_avg': '0.82' }
+                                     'use_time_avg': '0.82',
+                                    'usr_file_path': 'USR.csv'      }
         with open('config.ini', 'w') as configfile:
             config.write(configfile)
     def read_configuration_file(self):
@@ -68,7 +71,7 @@ class BenchmarkConfiguration ():
         self.experiment_name = config['PROGRAM.TO.TEST']['experiment_name']
         self.filewithfeatures = config['JS.FEATURES']['filewithfeatures']
         self.idf = config['PROGRAM.TO.TEST']['idf']
-        self.device = config['PROGRAM.TO.TEST']['device']
+        self.device_benchmarked = config['PROGRAM.TO.TEST']['device']
         self.program = config['PROGRAM.TO.TEST']['program']
         self.script = config['PROGRAM.TO.TEST']['script']
         self.jsfunction = config['PROGRAM.TO.TEST']['jsfunction']
@@ -76,6 +79,23 @@ class BenchmarkConfiguration ():
         self.file_size_org = float(config['DEFAULT.PERFORMANCE.MEASUREMENTS']['file_size'])
         self.mem_us_org = float(config['DEFAULT.PERFORMANCE.MEASUREMENTS']['mem_us'])
         self.use_time_avg = float(config['DEFAULT.PERFORMANCE.MEASUREMENTS']['use_time_avg'])
+        self.USR_file_path = config['DEFAULT.PERFORMANCE.MEASUREMENTS']['usr_file_path']
+
+    def fitem(item):
+        item = item.strip()
+        try:
+            item = float(item)
+        except ValueError:
+            pass
+        return item
+
+
+    def read_USR_file(self):
+        with open(self.USR_file_path) as f:
+            self.devices = [tuple(line) for line in csv.reader(f)]
+        self.devices.pop(0)
+
+        print("devices read from USR file:%d" %len(self.devices))
 
 class JSEngineHelper ():
     """We use this as a public class for evaluating the performance of a JS engine configuration

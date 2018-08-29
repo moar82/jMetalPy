@@ -1,7 +1,7 @@
 from jmetal.core.problem import BinaryProblem
 from jmetal.core.solution import BinarySolution
 from script_features import ScriptFeatures
-from statistics import median
+from statistics import median, mean
 """
 .. module:: miniaturization
    :platform: Unix, Windows
@@ -19,7 +19,7 @@ class Miniaturization(BinaryProblem):
       and 3 objectives (code size, memory and size).
     """
 
-    def __init__(self, number_of_variables: int = 1, number_of_objectives=3):
+    def __init__(self, number_of_variables: int = 1, number_of_objectives=4):
         """ :param number_of_variables: number of decision variables of the problem.
         """
         super(Miniaturization, self).__init__()
@@ -49,7 +49,7 @@ class Miniaturization(BinaryProblem):
         solution_evaluated = False
         ppm = self.sf.js_engine_helper.evaluate_solution_performance_(solution.variables[0])
 
-        '''TODO: Add the DSR evaluation of the properties of each device'''
+
         if ppm.memory_us[0]<float('inf'):
             '''We normalize the code with the original measurements '''
             solution.objectives[0] = self.__compute_delta\
@@ -59,12 +59,33 @@ class Miniaturization(BinaryProblem):
             median_execution_time = median(ppm.execution_time)
             solution.objectives[2] = self.__compute_delta\
                 (self.sf.bc.use_time_avg,median_execution_time)
+            '''Compute DSR of each  device'''
+            usr_list = []
+            dsr = []
+            cval_max = -1.0
+            for val in self.sf.bc.devices:
+               device_value = float(val[6])
+               dsr.append ( (self.compute_dsr(ppm, val), device_value))
+               if device_value > cval_max:
+                    cval_max = device_value
+            ''' Compute USR'''
+            for val in dsr:
+                usr_list.append( val[0] * ( val[1] /cval_max )  )
+            solution.objectives[3] = mean ( usr_list )
+
+
         else:
             '''we penalized the solution since it broke the execution'''
             solution.objectives[0] = float('inf')
             solution.objectives[1] = float('inf')
             solution.objectives[2] = float('inf')
+            solution.objectives[3] = float('inf')
         return solution
+
+    def compute_dsr(self, ppm, val):
+        device_memory = float(val[2])
+        device_storage = float(val[3])
+        return ((ppm.memory_us[0] - device_memory) / device_memory + (ppm.code_size[0] - device_storage) / device_storage) / 2
 
     def get_name(self):
         return 'Miniaturization'
