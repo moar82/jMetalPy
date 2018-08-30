@@ -175,7 +175,7 @@ class JSEngineHelper ():
         fout.close()
         '''Now we need to compile the new config file'''
         os.system('mkdir -p ' + self.cwd + '/duktape-src/' + self.bc.idf)
-        os.system('rm ' + self.cwd + '/duktape-src/' + self.bc.idf + '/*')
+        os.system('rm -f ' + self.cwd + '/duktape-src/' + self.bc.idf + '/*')
         '''Because using ROM requires special parameter for the config script
             we detect when this happens'''
         if asolution[6]==True:
