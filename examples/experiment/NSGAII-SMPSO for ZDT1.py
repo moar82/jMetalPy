@@ -9,10 +9,9 @@ from jmetal.util.laboratory import experiment, display
 algorithm = [
     (NSGAII, {'population_size': 100, 'max_evaluations': 25000, 'mutation': NullMutation(), 'crossover': SBX(1.0, 20),
               'selection': BinaryTournamentSelection(RankingAndCrowdingDistanceComparator())}),
-    (NSGAII(population_size=100, max_evaluations=25000, mutation=NullMutation(), crossover=SBX(1.0, 20),
-            selection=BinaryTournamentSelection(RankingAndCrowdingDistanceComparator()), problem=ZDT1()), {}),
-    (SMPSO, {'swarm_size': 100, 'max_evaluations': 25000, 'mutation': NullMutation(),
-             'leaders': CrowdingDistanceArchive(100)})
+    (NSGAII, {'population_size': 100, 'max_evaluations': 25000, 'mutation': NullMutation(), 'crossover': SBX(0.7, 20),
+              'selection': BinaryTournamentSelection(RankingAndCrowdingDistanceComparator())})
+
 ]
 metric = [HyperVolume(reference_point=[1, 1])]
 problem = [(ZDT1, {}), (ZDT2, {})]

@@ -50,6 +50,7 @@ class BenchmarkConfiguration ():
         self.read_USR_file()
     def create_default_configuration_file(self):
         config = configparser.ConfigParser()
+        config['DUKTAPE.OPTIONS'] = {'dukpath':'/home/moar82/duktape-2.3.0'}
         config['JS.FEATURES'] = {'filewithfeatures':'confOpt.csv'}
         config['PROGRAM.TO.TEST'] = {'experiment_name':'primeSimple',
                                     'idf':'optimize',
@@ -68,6 +69,7 @@ class BenchmarkConfiguration ():
     def read_configuration_file(self):
         config = configparser.ConfigParser()
         config.read('config.ini')
+        self.duk_path =  config['DUKTAPE.OPTIONS']['dukpath']
         self.experiment_name = config['PROGRAM.TO.TEST']['experiment_name']
         self.filewithfeatures = config['JS.FEATURES']['filewithfeatures']
         self.idf = config['PROGRAM.TO.TEST']['idf']
@@ -179,10 +181,10 @@ class JSEngineHelper ():
         '''Because using ROM requires special parameter for the config script
             we detect when this happens'''
         if asolution[6]==True:
-            os.system('python /home/moar82/duktape-2.3.0/tools/configure.py --output-directory ' + \
+            os.system('python '+ self.bc.duk_path+ '/tools/configure.py --output-directory ' + \
                       self.cwd + '/duktape-src/' + self.bc.idf + ' --rom-support --option-file ' +  fileoutname)
         else:
-            os.system('python /home/moar82/duktape-2.3.0/tools/configure.py --output-directory ' + \
+            os.system('python '+ self.bc.duk_path+ '/tools/configure.py --output-directory ' + \
                        self.cwd + '/duktape-src/' + self.bc.idf + ' --option-file '  + fileoutname)
         ###Copy the source code, since I have problems when compiling when the headers are in a different dir
         ###Now the next step is to compile the code
