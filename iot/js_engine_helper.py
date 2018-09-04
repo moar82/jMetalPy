@@ -112,6 +112,7 @@ class JSEngineHelper ():
         self.cwd = cwd
         self.bc = bc
         self.tested_solutions = {}
+        self.run_id = None
 
 
     defaultSolution = []
@@ -192,20 +193,20 @@ class JSEngineHelper ():
                 fout.write(feature + "\n")
             fout.close()
             '''Now we need to compile the new config file'''
-            os.system('mkdir -p ' + self.cwd + '/duktape-src/' + self.bc.idf)
-            os.system('rm -f ' + self.cwd + '/duktape-src/' + self.bc.idf + '/*')
+            os.system('mkdir -p ' + self.cwd + '/duktape-src/' + self.bc.idf + self.run_id)
+            os.system('rm -f ' + self.cwd + '/duktape-src/' + self.bc.idf + self.run_id+ '/*')
             '''Because using ROM requires special parameter for the config script
                 we detect when this happens'''
             if asolution[6]==True:
                 os.system('python '+ self.bc.duk_path+ '/tools/configure.py --output-directory ' + \
-                          self.cwd + '/duktape-src/' + self.bc.idf + ' --rom-support --option-file ' +  fileoutname)
+                          self.cwd + '/duktape-src/' + self.bc.idf + self.run_id + ' --rom-support --option-file ' +  fileoutname)
             else:
                 os.system('python '+ self.bc.duk_path+ '/tools/configure.py --output-directory ' + \
-                           self.cwd + '/duktape-src/' + self.bc.idf + ' --option-file '  + fileoutname)
+                           self.cwd + '/duktape-src/' + self.bc.idf + self.run_id + ' --option-file '  + fileoutname)
             ###Copy the source code, since I have problems when compiling when the headers are in a different dir
             ###Now the next step is to compile the code
-            os.system('cp -f ' + self.cwd + '/{' + self.bc.program + '.c,' + self.bc.script + '} ' + self.cwd + '/duktape-src/' + self.bc.idf + '/')
-            os.chdir(self.cwd + '/duktape-src/' + self.bc.idf + '/')
+            os.system('cp -f ' + self.cwd + '/{' + self.bc.program + '.c,' + self.bc.script + '} ' + self.cwd + '/duktape-src/' + self.bc.idf + self.run_id + '/')
+            os.chdir(self.cwd + '/duktape-src/' + self.bc.idf + self.run_id + '/')
             compileSucc = os.system('gcc -std=c99 -o ' + self.bc.program + ' -Iduktape-src duktape.c ' + self.bc.program + '.c -lm')
             if compileSucc != 0:
                 self.plog.logError("When compiling program: " + self.bc.program + ". configuration file: " + fileoutname + "\n")

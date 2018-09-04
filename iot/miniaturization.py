@@ -39,7 +39,16 @@ class Miniaturization(BinaryProblem):
         ##to generate the initial solutions
         self.sf = ScriptFeatures('')
         self.sf.read_features_file()
+        self.__run_id = None
 
+        '''to naming the different executions with an id'''
+    @property
+    def run_id(self) -> str:
+        return self.__run_id
+    @run_id.setter
+    def run_id(self,run_id) -> None:
+        self.__run_id = run_id
+        self.sf.js_engine_helper.run_id = run_id
 
     def evaluate(self, solution: BinarySolution) -> BinarySolution:
         ''' First repair the solution that could have been corrupted through the
