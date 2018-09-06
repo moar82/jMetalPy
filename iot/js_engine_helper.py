@@ -208,44 +208,52 @@ class JSEngineHelper ():
             os.system('cp -f ' + self.cwd + '/{' + self.bc.program + '.c,' + self.bc.script + '} ' + self.cwd + '/duktape-src/' + self.bc.idf + self.run_id + '/')
             os.chdir(self.cwd + '/duktape-src/' + self.bc.idf + self.run_id + '/')
             compileSucc = os.system('gcc -std=c99 -o ' + self.bc.program + ' -Iduktape-src duktape.c ' + self.bc.program + '.c -lm')
-            if compileSucc != 0:
-                self.plog.logError("When compiling program: " + self.bc.program + ". configuration file: " + fileoutname + "\n")
-                sys.exit()
-            ####Now let's measure the size of the file
-            returned_out = subprocess.check_output(["stat", "-c", "\"%s\"", self.bc.program])
-            try:
-                feature_size = float(returned_out.decode("utf-8").replace("\"", "").strip())
-            except ValueError:
-                # here we should log an error with the corresponding feature
-                self.plog.logError(
-                    "When measuring file size: " + self.bc.program + ". configuration file: " + fileoutname + ". errorMsg: " + returned_out.decode(
-                        "utf-8").replace("\"", "").strip() + "\n")
-                sys.exit()
-
-            ppm.code_size.append(feature_size)
-            """ Now it is time to execute the script to the harness and collect memory usage and execution time """
-            time_lines_count = 1  # how many lines /usr/bin/time produces
-            for count in range(0, int(self.bc.runs)):
-                p = subprocess.Popen(['/usr/bin/time', '-f \" %U , %S , %P\"', \
-                                      './' + self.bc.program, self.bc.script, self.bc.jsfunction], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                with p.stdout:
-                    r = deque(iter(p.stdout.readline, b''), maxlen=time_lines_count)
-                with p.stderr:
-                    q = deque(iter(p.stderr.readline, b''), maxlen=time_lines_count)
-                rc = p.wait()
-                # print(b''.join(q).decode().strip())
-                coltemp = str(b''.join(r).decode().strip()).split(',') + str(b''.join(q).decode().strip()).split(',')
-                print  (coltemp)
+            if compileSucc == 0:
+                ####Now let's measure the size of the file
+                returned_out = subprocess.check_output(["stat", "-c", "\"%s\"", self.bc.program])
                 try:
-                    ppm.memory_us.append(float(coltemp[0].replace("\"", "").strip()))
-                except:
-                    self.plog.logError("When executing program: " + self.bc.program + ". configuration file: " + fileoutname + ". errorMsg: " +
-                                       coltemp[0].replace("\"", "").strip() + "\n")
-                    ppm.memory_us.append  (float('inf'))
-                    break
-                ppm.execution_time.append(float(coltemp[1].replace("\"","").strip()))
-            os.chdir(self.cwd) #always return to the original path
-            self.tested_solutions[decimal_rep_asolution]= [ppm.code_size,ppm.memory_us,ppm.execution_time]
+                    feature_size = float(returned_out.decode("utf-8").replace("\"", "").strip())
+                except ValueError:
+                    # here we should log an error with the corresponding feature
+                    self.plog.logError(
+                        "When measuring file size: " + self.bc.program + ". configuration file: " + fileoutname + ". errorMsg: " + returned_out.decode(
+                            "utf-8").replace("\"", "").strip() + "\n")
+                    self.plog.logError(
+                        "When executing program: " + self.bc.program + ". configuration file: " + fileoutname + "\n")
+                    os.chdir(self.cwd)  # always return to the original path
+                    ppm.memory_us.append(float('inf'))
+                    self.tested_solutions[decimal_rep_asolution] = [float('inf'), float('inf'), float('inf')]
+                    return ppm
+
+                ppm.code_size.append(feature_size)
+                """ Now it is time to execute the script to the harness and collect memory usage and execution time """
+                time_lines_count = 1  # how many lines /usr/bin/time produces
+                for count in range(0, int(self.bc.runs)):
+                    p = subprocess.Popen(['/usr/bin/time', '-f \" %U , %S , %P\"', \
+                                          './' + self.bc.program, self.bc.script, self.bc.jsfunction], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                    with p.stdout:
+                        r = deque(iter(p.stdout.readline, b''), maxlen=time_lines_count)
+                    with p.stderr:
+                        q = deque(iter(p.stderr.readline, b''), maxlen=time_lines_count)
+                    rc = p.wait()
+                    # print(b''.join(q).decode().strip())
+                    coltemp = str(b''.join(r).decode().strip()).split(',') + str(b''.join(q).decode().strip()).split(',')
+                    print  (coltemp)
+                    try:
+                        ppm.memory_us.append(float(coltemp[0].replace("\"", "").strip()))
+                    except:
+                        self.plog.logError("When executing program: " + self.bc.program + ". configuration file: " + fileoutname + ". errorMsg: " +
+                                           coltemp[0].replace("\"", "").strip() + "\n")
+                        ppm.memory_us.append  (float('inf'))
+                        break
+                    ppm.execution_time.append(float(coltemp[1].replace("\"","").strip()))
+                self.tested_solutions[decimal_rep_asolution]= [ppm.code_size,ppm.memory_us,ppm.execution_time]
+            else:
+                self.plog.logError(
+                    "When compiling program: " + self.bc.program + ". configuration file: " + fileoutname + "\n")
+                ppm.memory_us.append(float('inf'))
+                self.tested_solutions[decimal_rep_asolution] = [float('inf'), float('inf'), float('inf')]
+            os.chdir(self.cwd)  # always return to the original path
         return ppm
 
 

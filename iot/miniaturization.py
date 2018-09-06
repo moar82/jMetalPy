@@ -40,6 +40,7 @@ class Miniaturization(BinaryProblem):
         self.sf = ScriptFeatures('')
         self.sf.read_features_file()
         self.__run_id = None
+        self.repair_solution = True
 
         '''to naming the different executions with an id'''
     @property
@@ -53,8 +54,9 @@ class Miniaturization(BinaryProblem):
     def evaluate(self, solution: BinarySolution) -> BinarySolution:
         ''' First repair the solution that could have been corrupted through the
             transformation operators'''
-        repaired_solution = self.sf.js_engine_helper.repair_solution(solution.variables[0])
-        solution.variables[0] = repaired_solution
+        if self.repair_solution==True:
+            repaired_solution = self.sf.js_engine_helper.repair_solution(solution.variables[0])
+            solution.variables[0] = repaired_solution
         solution_evaluated = False
         ppm = self.sf.js_engine_helper.evaluate_solution_performance_(solution.variables[0])
 
