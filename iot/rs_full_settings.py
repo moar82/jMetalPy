@@ -42,5 +42,5 @@ if __name__ == '__main__':
     print('Algorithm (binary problem): ' + algorithm.get_name())
     print('Problem: ' + problem.get_name())
     print ('HyperVolume: %f' % value)
-    print('Computing time: ' + str(algorithm.total_computing_time))
+    #print('Computing time: ' + str(algorithm.total_computing_time))
     problem.sf.plog.logError('Repeated solutions:'+str(len(problem.sf.js_engine_helper.tested_solutions))+'\n')
