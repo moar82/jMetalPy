@@ -91,6 +91,7 @@ class Miniaturization(BinaryProblem):
             solution.objectives[1] = float('inf')
             solution.objectives[2] = float('inf')
             solution.objectives[3] = float('inf')
+        print (solution.objectives)
         return solution
 
     def compute_dsr(self, ppm, val):

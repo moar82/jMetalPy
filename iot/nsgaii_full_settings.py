@@ -17,8 +17,8 @@ if __name__ == '__main__':
         problem=problem,
         population_size=10,
         max_evaluations=250,
-        mutation=BitFlip(probability=0.1), #use the same values that in MoMS
-        crossover=SP(probability=0.9),#use the same values that in MoMS
+        mutation=BitFlip(probability=0.1), #the best according to our test
+        crossover=SP(probability=0.8),#the best according to our test
         selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator())
     )
 
