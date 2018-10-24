@@ -1,5 +1,5 @@
 import configparser
-import sys,  os, subprocess, csv
+import os, subprocess, csv
 from collections import deque
 from random import random
 
@@ -36,51 +36,66 @@ class ProgramLog():
 
 
 class BenchmarkConfiguration ():
-    ''' Here we read the configuration from a text file
-        TODO: Add the properties of each device:memory capacity, storage capacity
-        '''
-    def __init__(self) -> None:
+    ''' Here we read the configuration from a text file  '''
+    def __init__(self,script) -> None:
         super().__init__()
+        self.script = script  # this is the javascript file to be miniaturized
         '''if there is not  configuration file we create a new one'''
         if os.path.isfile('config.ini') == False:
             self.create_default_configuration_file()
         self.read_configuration_file()
         self.devices = []
         self.read_USR_file()
+
     def create_default_configuration_file(self):
         config = configparser.ConfigParser()
         config['DUKTAPE.OPTIONS'] = {'dukpath':'/home/moar82/duktape-2.3.0'}
         config['JS.FEATURES'] = {'filewithfeatures':'confOpt.csv'}
-        config['PROGRAM.TO.TEST'] = {'experiment_name':'primeSimple',
-                                    'idf':'optimize',
+        config['PROGRAM.TO.TEST'] = {'idf':'optimize',
                                      'device':'laptop',
-                                     'program':'harness',
-                                     'script':'primeSimple.js',
-                                     'jsfunction':'forTest',
-                                     'runs':'10'
+                                     'program':'harness', #this is the .c program that embbeds the js interpreter
+                                     'jsfunction':'.', #this is the jsfunction to execute inside JScript. '.' executes all the script
+                                     'runs':'10',
+                                     'prefix_benchmark_file':'median_results_original_default_',
+                                     'mandatory_features_file':'testbed_required_features.csv'
                                      }
-        config['DEFAULT.PERFORMANCE.MEASUREMENTS'] = {'file_size': '555896.00',
-                                     'mem_us': '104816.00',
-                                     'use_time_avg': '0.82',
-                                    'usr_file_path': 'USR.csv'      }
+        config['DEFAULT.PERFORMANCE.MEASUREMENTS'] = {'usr_file_path': 'USR.csv'}
         with open('config.ini', 'w') as configfile:
             config.write(configfile)
     def read_configuration_file(self):
         config = configparser.ConfigParser()
         config.read('config.ini')
         self.duk_path =  config['DUKTAPE.OPTIONS']['dukpath']
-        self.experiment_name = config['PROGRAM.TO.TEST']['experiment_name']
+        self.experiment_name = self.script.split('.')[0]
         self.filewithfeatures = config['JS.FEATURES']['filewithfeatures']
         self.idf = config['PROGRAM.TO.TEST']['idf']
         self.device_benchmarked = config['PROGRAM.TO.TEST']['device']
         self.program = config['PROGRAM.TO.TEST']['program']
-        self.script = config['PROGRAM.TO.TEST']['script']
         self.jsfunction = config['PROGRAM.TO.TEST']['jsfunction']
         self.runs = config['PROGRAM.TO.TEST']['runs']
-        self.file_size_org = float(config['DEFAULT.PERFORMANCE.MEASUREMENTS']['file_size'])
-        self.mem_us_org = float(config['DEFAULT.PERFORMANCE.MEASUREMENTS']['mem_us'])
-        self.use_time_avg = float(config['DEFAULT.PERFORMANCE.MEASUREMENTS']['use_time_avg'])
+        benchmark_file =   config['PROGRAM.TO.TEST']['prefix_benchmark_file'] + self.experiment_name + '.csv'
+        mandatory_features_file = config['PROGRAM.TO.TEST']['mandatory_features_file']
+        '''Read file output of benchmark project'''
+        with open (benchmark_file,'r') as pmeasurescsv:
+            csvreader = csv.reader(pmeasurescsv)
+            '''skip the header'''
+            next(csvreader)
+            for row in csvreader:
+                self.file_size_org = float(row[0])
+                self.mem_us_org = float(row[1])
+                self.use_time_avg = float(row[2])
         self.USR_file_path = config['DEFAULT.PERFORMANCE.MEASUREMENTS']['usr_file_path']
+
+        '''Read file with mandatory features'''
+        with open (mandatory_features_file,'r') as mandatory_featurescsv:
+            csvreader = csv.reader(mandatory_featurescsv)
+            '''skip the header'''
+            next(csvreader)
+            for row in csvreader:
+                if row[0]==self.script.split('.')[0]:
+                    self.mandatory_features = [int(x) for x in row[1].split(';') if x.strip().isdigit()]
+                    break
+
 
     def fitem(item):
         item = item.strip()
@@ -113,6 +128,7 @@ class JSEngineHelper ():
         self.bc = bc
         self.tested_solutions = {}
         self.run_id = None
+
 
 
     defaultSolution = []
@@ -162,6 +178,11 @@ class JSEngineHelper ():
         # f24 requires f30 to be deactivated as well
         if asolution[23] == False:
             asolution[29] = False
+
+        ###now we need to ensure that the mandatory features are not altered
+        for feature in self.bc.mandatory_features:
+            asolution[feature-1] = self.defaultSolution[feature-1]
+
         return asolution
 
 

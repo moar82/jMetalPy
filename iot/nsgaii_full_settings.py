@@ -9,10 +9,12 @@ from jmetal.component.quality_indicator import HyperVolume
 
 if __name__ == '__main__':
     problem = Miniaturization()
-    if  len (sys.argv) < 2:
-        problem.run_id = '_NoRunProvided'
+    if  len (sys.argv) < 3:
+        print ('You must provide 2 arguments: number of run, js script to miniaturize')
+        sys.exit(1)
     else:
         problem.run_id = '_' + sys.argv[1] # we use this value to name the solution output
+        problem.script = sys.argv[2] # we parametrize the script
     algorithm = NSGAII(
         problem=problem,
         population_size=10,
@@ -48,3 +50,4 @@ if __name__ == '__main__':
     print ('HyperVolume: %f' % value)
     print('Computing time: ' + str(algorithm.total_computing_time))
     problem.sf.plog.logError('Repeated solutions:'+str(len(problem.sf.js_engine_helper.tested_solutions))+'\n')
+    problem.save_values_achieved(front,'values_achieved_'+problem.script.split('.')[0] + problem.run_id + '.csv')

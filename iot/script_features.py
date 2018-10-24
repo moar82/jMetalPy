@@ -20,10 +20,19 @@ class ScriptFeatures():
     """
     d = OrderedDict ()
     cwd = os.getcwd() #do not change
-    def __init__(self, wkDir):
+
+    @property
+    def run_id(self) -> str:
+        return self.__run_id
+
+    @run_id.setter
+    def run_id(self, run_id) -> None:
+        self.__run_id = run_id
+        self.js_engine_helper.run_id = run_id
+    def __init__(self, wkDir, script):
         if len(wkDir)>0:
             self.cwd = wkDir
-        self.bc = BenchmarkConfiguration()
+        self.bc = BenchmarkConfiguration(script)
         self.plog = ProgramLog(self.cwd, self.bc.experiment_name)
         self.js_engine_helper = JSEngineHelper(self.plog,self.cwd, self.bc)
         self.filewithfeatures = self.bc.filewithfeatures

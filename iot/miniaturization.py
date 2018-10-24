@@ -35,10 +35,7 @@ class Miniaturization(BinaryProblem):
         BinarySolution.lower_bound = self.lower_bound
         BinarySolution.upper_bound = self.upper_bound
 
-        ##call the function to open the configuration file, and store it in the map
-        ##to generate the initial solutions
-        self.sf = ScriptFeatures('')
-        self.sf.read_features_file()
+
         self.__run_id = None
         self.repair_solution = True
 
@@ -49,7 +46,19 @@ class Miniaturization(BinaryProblem):
     @run_id.setter
     def run_id(self,run_id) -> None:
         self.__run_id = run_id
-        self.sf.js_engine_helper.run_id = run_id
+    '''to parametrize the name of the script to analyse to perform batch mode using bash script'''
+    @property
+    def script(self) -> str:
+        return self.__script
+    @script.setter
+    def script (self,script) -> None:
+        self.__script= script
+        ##call the function to open the configuration file, and store it in the map
+        ##to generate the initial solutions
+        self.sf = ScriptFeatures('', script )
+        self.sf.run_id =  self.__run_id ###this have to be called after setting the run_id in the client call
+        self.sf.read_features_file()
+
 
     def evaluate(self, solution: BinarySolution) -> BinarySolution:
         ''' First repair the solution that could have been corrupted through the
@@ -61,37 +70,44 @@ class Miniaturization(BinaryProblem):
         ppm = self.sf.js_engine_helper.evaluate_solution_performance_(solution.variables[0])
 
 
-        if ppm.memory_us[0]<float('inf'):
-            '''We normalize the code with the original measurements '''
-            solution.objectives[0] = self.__compute_delta\
-                (self.sf.bc.file_size_org,ppm.code_size[0])#this does not vary through executions
-            solution.objectives[1] = self.__compute_delta\
-                (self.sf.bc.mem_us_org,ppm.memory_us[0])  #this does not vary through executions
-            median_execution_time = median(ppm.execution_time)
-            solution.objectives[2] = self.__compute_delta\
-                (self.sf.bc.use_time_avg,median_execution_time)
-            '''Compute DSR of each  device'''
-            usr_list = []
-            dsr = []
-            cval_max = -1.0
-            for val in self.sf.bc.devices:
-               device_value = float(val[6])
-               dsr.append ( (self.compute_dsr(ppm, val), device_value))
-               if device_value > cval_max:
-                    cval_max = device_value
-            ''' Compute USR'''
-            for val in dsr:
-                usr_list.append( val[0] * ( val[1] /cval_max )  )
-            solution.objectives[3] = mean ( usr_list )
+        try:
+            if ppm.memory_us[0]!=float('inf'):
+                '''We normalize the code with the original measurements '''
+                solution.objectives[0] = self.__compute_delta\
+                    (self.sf.bc.file_size_org,ppm.code_size[0])#this does not vary through executions
+                solution.objectives[1] = self.__compute_delta\
+                    (self.sf.bc.mem_us_org,ppm.memory_us[0])  #this does not vary through executions
+                median_execution_time = median(ppm.execution_time)
+                solution.objectives[2] = self.__compute_delta\
+                    (self.sf.bc.use_time_avg,median_execution_time)
+                '''Compute DSR of each  device'''
+                usr_list = []
+                dsr = []
+                cval_max = -1.0
+                for val in self.sf.bc.devices:
+                   device_value = float(val[6])
+                   dsr.append ( (self.compute_dsr(ppm, val), device_value))
+                   if device_value > cval_max:
+                        cval_max = device_value
+                ''' Compute USR'''
+                for val in dsr:
+                    usr_list.append( val[0] * ( val[1] /cval_max )  )
+                solution.objectives[3] = mean ( usr_list )
 
 
-        else:
+            else:
+                '''we penalized the solution since it broke the execution'''
+                solution.objectives[0] = float('inf')
+                solution.objectives[1] = float('inf')
+                solution.objectives[2] = float('inf')
+                solution.objectives[3] = float('inf')
+            print (solution.objectives)
+        except TypeError:
             '''we penalized the solution since it broke the execution'''
             solution.objectives[0] = float('inf')
             solution.objectives[1] = float('inf')
             solution.objectives[2] = float('inf')
             solution.objectives[3] = float('inf')
-        print (solution.objectives)
         return solution
 
     def compute_dsr(self, ppm, val):
@@ -111,3 +127,17 @@ class Miniaturization(BinaryProblem):
         new_solution.variables = \
             [self.sf.get_random_individual() for i in range(self.number_of_variables)]
         return new_solution
+
+    def save_values_achieved(self,solution_list: list, file_name):
+        '''to compare the results in disk space, memory usage and execution time'''
+        with open(file_name, 'w') as of:
+            for solution in solution_list:
+                file_size = (solution[0]*self.sf.bc.file_size_org) +self.sf.bc.file_size_org
+                usr_mem = (solution[1]*self.sf.bc.mem_us_org) +self.sf.bc.mem_us_org
+                time_usr =(solution[2]*self.sf.bc.use_time_avg) +self.sf.bc.use_time_avg
+                dsr = solution[3]
+                of.write(str(file_size) + ",")
+                of.write(str(usr_mem) + ",")
+                of.write(str(time_usr) + ",")
+                of.write(str(dsr))
+                of.write("\n")
