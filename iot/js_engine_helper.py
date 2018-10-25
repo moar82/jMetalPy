@@ -1,5 +1,5 @@
 import configparser
-import os, subprocess, csv, datetime
+import os, subprocess, csv, datetime, time
 from collections import deque
 from random import random
 
@@ -263,6 +263,7 @@ class JSEngineHelper ():
                     try:
                         ppm.memory_us.append(float(coltemp[0].replace("\"", "").strip()))
                     except:
+                        ts = time.time()
                         st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
                         self.plog.logError(st +" When executing program: " + self.bc.program + ". configuration file: " + fileoutname + ". errorMsg: " +
                                            coltemp[0].replace("\"", "").strip() + "\n")
