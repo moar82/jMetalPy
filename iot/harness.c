@@ -11,11 +11,11 @@
 #include <string.h>
 #include "duktape.h"
 
-/* For brevity assumes a maximum file length of 16kB. */
+/* For brevity assumes a maximum file length of 17kB. */
 static void push_file_as_string(duk_context *ctx, const char *filename) {
     FILE *f;
     size_t len;
-    char buf[16384];
+    char buf[17384];
 
     f = fopen(filename, "rb");
     if (f) {
@@ -61,7 +61,7 @@ int main(int argc, const char *argv[]) {
 	    }
 
 	    //these 3 lines are only used for debuggin purposes. Comment otherwise
-	    /*duk_push_global_object(ctx);
+	/*duk_push_global_object(ctx);
     	duk_push_c_function(ctx, native_print, DUK_VARARGS);
     	duk_put_prop_string(ctx, -2, "print");*/
 	
@@ -72,16 +72,23 @@ int main(int argc, const char *argv[]) {
 	        goto finished;
 	    }
 	    duk_pop(ctx);  /* ignore result */
-	    duk_push_global_object(ctx);
-	    duk_get_prop_string(ctx, -1 /*index*/, argv[2]);
-	//    duk_push_string(ctx, line);
-	    if (duk_pcall(ctx, 0 /*nargs*/) != 0) {
-	        printf("Error: %s\n", duk_safe_to_string(ctx, -1));
+	    /* when the js function argument is different from 0 we
+		* should call the function specified by the argument.
+		* Hence, the following lines inside the if are required */	
+	    if (strcmp(argv[2],".")!=0){
+		duk_push_global_object(ctx);
+	    	duk_get_prop_string(ctx, -1 /*index*/, argv[2]);
+	    	printf("js function name provided %s \n", argv[2]);
+          //    duk_push_string(ctx, line);
+	    	if (duk_pcall(ctx, 0 /*nargs*/) != 0) {
+	        	printf("Error: %s\n", duk_safe_to_string(ctx, -1));
 	            } 
-	    /*else {
+	    	/*else {
 	                printf("%s\n", duk_safe_to_string(ctx, -1));
 	            }*/
-	    duk_pop(ctx);  /* pop result/error */
+	    	duk_pop(ctx);  /* pop result/error */
+	    }
+	
 	    int JS_MemoryUsed = get_total_size_of_memory_occupied();
 	    printf("%d",JS_MemoryUsed );
 		
