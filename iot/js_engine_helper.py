@@ -269,7 +269,7 @@ class JSEngineHelper ():
                                            coltemp[0].replace("\"", "").strip() + "\n")
                         ppm.memory_us.append  (float('inf'))
                         '''back up defective yaml file for further analysis '''
-                        os.system('cp ' + fileoutname + '.' + st)
+                        os.system('cp ' + fileoutname + ' ' + fileoutname + '.' + st)
                         break
                     ppm.execution_time.append(float(coltemp[1].replace("\"","").strip()))
                 self.tested_solutions[decimal_rep_asolution]= [ppm.code_size,ppm.memory_us,ppm.execution_time]
