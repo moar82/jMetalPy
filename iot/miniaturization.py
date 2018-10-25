@@ -132,10 +132,10 @@ class Miniaturization(BinaryProblem):
         '''to compare the results in disk space, memory usage and execution time'''
         with open(file_name, 'w') as of:
             for solution in solution_list:
-                file_size = (solution[0]*self.sf.bc.file_size_org) +self.sf.bc.file_size_org
-                usr_mem = (solution[1]*self.sf.bc.mem_us_org) +self.sf.bc.mem_us_org
-                time_usr =(solution[2]*self.sf.bc.use_time_avg) +self.sf.bc.use_time_avg
-                dsr = solution[3]
+                file_size = (solution.objectives[0]*self.sf.bc.file_size_org) +self.sf.bc.file_size_org
+                usr_mem = (solution.objectives[1]*self.sf.bc.mem_us_org) +self.sf.bc.mem_us_org
+                time_usr =(solution.objectives[2]*self.sf.bc.use_time_avg) +self.sf.bc.use_time_avg
+                dsr = solution.objectives[3]
                 of.write(str(file_size) + ",")
                 of.write(str(usr_mem) + ",")
                 of.write(str(time_usr) + ",")
