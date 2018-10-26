@@ -264,20 +264,23 @@ class JSEngineHelper ():
                         ppm.memory_us.append(float(coltemp[0].replace("\"", "").strip()))
                     except:
                         ts = time.time()
-                        st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-                        self.plog.logError(st +" When executing program: " + self.bc.program + ". configuration file: " + fileoutname + ". errorMsg: " +
+                        #st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+                        self.plog.logError(str(ts) +" When executing program: " + self.bc.program + ". configuration file: " + fileoutname + ". errorMsg: " +
                                            coltemp[0].replace("\"", "").strip() + "\n")
                         ppm.memory_us.append  (float('inf'))
                         '''back up defective yaml file for further analysis '''
-                        os.system('cp ' + fileoutname + ' ' + fileoutname + '.' + st)
+                        os.system('cp ' + fileoutname + ' ' + fileoutname + '.' + str(ts) + '.execution_error')
                         break
                     ppm.execution_time.append(float(coltemp[1].replace("\"","").strip()))
                 self.tested_solutions[decimal_rep_asolution]= [ppm.code_size,ppm.memory_us,ppm.execution_time]
             else:
+                ts = time.time()
                 self.plog.logError(
-                    "When compiling program: " + self.bc.program + ". configuration file: " + fileoutname + "\n")
+                    str(ts) + "When compiling program: " + self.bc.program + ". configuration file: " + fileoutname + "\n")
                 ppm.memory_us.append(float('inf'))
                 self.tested_solutions[decimal_rep_asolution] = [float('inf'), float('inf'), float('inf')]
+                '''back up defective yaml file for further analysis '''
+                os.system('cp ' + fileoutname + ' ' + fileoutname + '.' + str(ts) + '.compile_error')
             os.chdir(self.cwd)  # always return to the original path
         return ppm
 
