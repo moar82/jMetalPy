@@ -1,5 +1,6 @@
 import configparser
-import os, subprocess, csv, datetime, time
+import os, csv, subprocess, datetime, time
+from tempfile import TemporaryFile
 from collections import deque
 from random import random
 
@@ -185,6 +186,16 @@ class JSEngineHelper ():
 
         return asolution
 
+    def get_out(self,*args):
+        with TemporaryFile() as t:
+            try:
+                print (args)
+                out = subprocess.check_output(args, stderr=t)
+                return 0, out
+            except subprocess.CalledProcessError as e:
+                t.seek(0)
+                return e.returncode, t.read()
+
 
     def evaluate_solution_performance_(self, asolution):
         ''' Create a new object to record the measurements'''
@@ -218,6 +229,7 @@ class JSEngineHelper ():
             os.system('rm -f ' + self.cwd + '/duktape-src/' + self.bc.idf + self.run_id+ '/*')
             '''Because using ROM requires special parameter for the config script
                 we detect when this happens'''
+            print ("preparing to compile file for " + self.bc.script + " script")
             if asolution[6]==True:
                 os.system('python '+ self.bc.duk_path+ '/tools/configure.py --output-directory ' + \
                           self.cwd + '/duktape-src/' + self.bc.idf + self.run_id + ' --rom-support --option-file ' +  fileoutname)
@@ -228,8 +240,9 @@ class JSEngineHelper ():
             ###Now the next step is to compile the code
             os.system('cp -f ' + self.cwd + '/{' + self.bc.program + '.c,' + self.bc.script + '} ' + self.cwd + '/duktape-src/' + self.bc.idf + self.run_id + '/')
             os.chdir(self.cwd + '/duktape-src/' + self.bc.idf + self.run_id + '/')
-            compileSucc = os.system('gcc -std=c99 -o ' + self.bc.program + ' -Iduktape-src duktape.c ' + self.bc.program + '.c -lm')
-            if compileSucc == 0:
+            compileSucc = self.get_out('gcc', '-std=c99', '-o',  self.bc.program , '-Iduktape-src' , 'duktape.c' , self.bc.program +
+                                       '.c' , '-lm')
+            if compileSucc[0] == 0:
                 ####Now let's measure the size of the file
                 returned_out = subprocess.check_output(["stat", "-c", "\"%s\"", self.bc.program])
                 try:
@@ -276,7 +289,8 @@ class JSEngineHelper ():
             else:
                 ts = time.time()
                 self.plog.logError(
-                    str(ts) + "When compiling program: " + self.bc.program + ". configuration file: " + fileoutname + "\n")
+                    str(ts) + "When compiling program: " + self.bc.program + ". configuration file: " + fileoutname +
+                        ' ' + str(compileSucc[1]) + "\n")
                 ppm.memory_us.append(float('inf'))
                 self.tested_solutions[decimal_rep_asolution] = [float('inf'), float('inf'), float('inf')]
                 '''back up defective yaml file for further analysis '''
