@@ -229,7 +229,7 @@ class JSEngineHelper ():
             os.system('rm -f ' + self.cwd + '/duktape-src/' + self.bc.idf + self.run_id+ '/*')
             '''Because using ROM requires special parameter for the config script
                 we detect when this happens'''
-            print ("preparing to compile file for " + self.bc.script + " script")
+            print ("preparing to compile file for " + self.bc.script + " script, run " + self.run_id)
             if asolution[6]==True:
                 os.system('python '+ self.bc.duk_path+ '/tools/configure.py --output-directory ' + \
                           self.cwd + '/duktape-src/' + self.bc.idf + self.run_id + ' --rom-support --option-file ' +  fileoutname)
