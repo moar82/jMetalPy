@@ -5,16 +5,18 @@ from var_2_yaml import Convert_VAR_2_YAML
 
 
 class Convert_VAR_2_YAMLTestCases (unittest.TestCase):
+    VAR_file = 'VAR.NSGAII.3d-morph.js.1.Miniaturization_test'
+
     def test_read_features_file(self):
-        convert = Convert_VAR_2_YAML('','confOpt.csv','VAR.NSGAII.3d-morph.js.1.Miniaturization_test')
+        convert = Convert_VAR_2_YAML('','confOpt.csv', self.VAR_file)
         self.assertTrue(convert.read_features_file())
     def test_read_solution_file(self):
         convert = Convert_VAR_2_YAML('', 'confOpt.csv',
-                                     'VAR.NSGAII.3d-morph.js.1.Miniaturization_test')
+                                     self.VAR_file)
         self.assertTrue(convert.read_solution_file())
     def test_parse_solutions_file_to_yaml_files (self):
         convert = Convert_VAR_2_YAML('', 'confOpt.csv',
-                                     'VAR.NSGAII.3d-morph.js.1.Miniaturization_test')
+                                     self.VAR_file)
         convert.read_features_file()
         convert.read_solution_file()
         self.assertTrue(convert.parse_solutions_file_to_yaml_files())
