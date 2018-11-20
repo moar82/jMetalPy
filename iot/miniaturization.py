@@ -68,8 +68,6 @@ class Miniaturization(BinaryProblem):
             solution.variables[0] = repaired_solution
         solution_evaluated = False
         ppm = self.sf.js_engine_helper.evaluate_solution_performance_(solution.variables[0])
-
-
         try:
             if ppm.memory_us[0]!=float('inf'):
                 '''We normalize the code with the original measurements '''
@@ -93,8 +91,6 @@ class Miniaturization(BinaryProblem):
                 for val in dsr:
                     usr_list.append( val[0] * ( val[1] /cval_max )  )
                 solution.objectives[3] = mean ( usr_list )
-
-
             else:
                 '''we penalized the solution since it broke the execution'''
                 solution.objectives[0] = float('inf')

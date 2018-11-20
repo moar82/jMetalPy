@@ -1,4 +1,5 @@
 import configparser
+import math
 import os, csv, subprocess, datetime, time
 from tempfile import TemporaryFile
 from collections import deque
@@ -82,9 +83,16 @@ class BenchmarkConfiguration ():
             '''skip the header'''
             next(csvreader)
             for row in csvreader:
-                self.file_size_org = float(row[0])
-                self.mem_us_org = float(row[1])
-                self.use_time_avg = float(row[2])
+                try:
+                    self.file_size_org = float(row[0])
+                    self.mem_us_org = float(row[1])
+                    self.use_time_avg = float(row[2])
+                except ValueError:
+                    print("Oops!  That was no valid number in" +benchmark_file)
+        if math.isnan(self.mem_us_org) or math.isnan(self.use_time_avg) or math.isnan(self.file_size_org):
+            print("Oops!  nan was found in: " + benchmark_file )
+            exit(1)
+
         self.USR_file_path = config['DEFAULT.PERFORMANCE.MEASUREMENTS']['usr_file_path']
 
         '''Read file with mandatory features'''
