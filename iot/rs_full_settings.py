@@ -48,6 +48,6 @@ if __name__ == '__main__':
     print ('HyperVolume: %f' % value)
     # print('Computing time: ' + str(algorithm.total_computing_time)) not implemented in rs algorithm
     problem.sf.plog.logError('Run: ' + problem.run_id.replace('_','') + ' js script: ' + problem.script + '\n')
-    problem.sf.plog.logError('Computing time: ' + str(algorithm.total_computing_time)+ '\n')
+    #problem.sf.plog.logError('Computing time: ' + str(algorithm.total_computing_time)+ '\n')
     problem.sf.plog.logError('Repeated solutions:'+str(len(problem.sf.js_engine_helper.tested_solutions))+'\n')
     problem.save_values_achieved(front,'values_achieved_'+problem.script.split('.')[0] + problem.run_id.replace('_','') + '.csv')
