@@ -20,25 +20,27 @@ if __name__ == '__main__':
         )
 
 
-    #observer = VisualizerObserver(problem)
-    #progress_bar = ProgressBarObserver(step=10, maximum=250)
-    #algorithm.observable.register(observer=observer)
-    #algorithm.observable.register(observer=progress_bar)
+    ##observer = VisualizerObserver(problem)
+    ##progress_bar = ProgressBarObserver(step=10, maximum=250)
+    ##algorithm.observable.register(observer=observer)
+    ##algorithm.observable.register(observer=progress_bar)
 
     algorithm.run()
     front = algorithm.get_result()
 
-    # Plot frontier to file
-    #pareto_front = ScatterMatplotlib(plot_title='NSGAII for IoT-Min', number_of_objectives=problem.number_of_objectives)
-    #pareto_front.plot(front, reference=problem.get_reference_front(), output='NSGAII-IoT-Min', show=False)
+    ## Plot frontier to file
+    ##pareto_front = ScatterMatplotlib(plot_title='NSGAII for IoT-Min', number_of_objectives=problem.number_of_objectives)
+    ##pareto_front.plot(front, reference=problem.get_reference_front(), output='NSGAII-IoT-Min', show=False)
 
-    # Save variables to file
+    ## Save variables to file
     SolutionList.print_function_values_to_file(front,
                                                'FUN.RS.' + problem.script + '.' + problem.run_id.replace('_', '') +
                                                '.' + problem.get_name())
     SolutionList.print_variables_to_file(front, 'VAR.RS.' + problem.script + '.' + problem.run_id.replace('_', '') +
+
                                          '.' + problem.get_name())
-    reference_point = [1, 1, 1 ,1]
+    reference_point = [1, 1, 1]
+    #reference_point = [1, 1, 1 ,1]
     hv = HyperVolume(reference_point)
     value = hv.compute(front)
     with open("HV." + problem.script + '.' +problem.run_id.replace('_','')  + '.' + problem.get_name(), "w") as text_file:
@@ -46,10 +48,10 @@ if __name__ == '__main__':
     print('Algorithm (binary problem): ' + algorithm.get_name())
     print('Problem: ' + problem.get_name())
     print ('HyperVolume: %f' % value)
-    # print('Computing time: ' + str(algorithm.total_computing_time)) not implemented in rs algorithm
+    ## print('Computing time: ' + str(algorithm.total_computing_time)) not implemented in rs algorithm
     problem.save_values_achieved(front, 'values_achieved_' + problem.script.split('.')[0] + problem.run_id.replace('_',
                                                                                                                    '') + '.csv')
 
     problem.sf.plog.logError('Run: ' + problem.run_id.replace('_','') + ' js script: ' + problem.script + '\n')
-    #problem.sf.plog.logError('Computing time: ' + str(algorithm.total_computing_time)+ '\n')
+    ##problem.sf.plog.logError('Computing time: ' + str(algorithm.total_computing_time)+ '\n')
     problem.sf.plog.logError('Repeated solutions:'+str(len(problem.sf.js_engine_helper.tested_solutions))+'\n')

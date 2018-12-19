@@ -21,6 +21,7 @@ class RandomSearch(Generic[S]):
                  max_evaluations: int = 25000):
         self.problem = problem
         self.max_evaluations = max_evaluations
+        print ("max evaluations: " + str(max_evaluations))
         self.archive = NonDominatedSolutionListArchive()
 
     def run(self) -> None:
