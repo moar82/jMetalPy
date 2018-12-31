@@ -17,8 +17,8 @@ if __name__ == '__main__':
         problem.script = sys.argv[2] # we parametrize the script
     algorithm = NSGAII(
         problem=problem,
-        population_size=10,
-        max_evaluations=250,
+        population_size=100,
+        max_evaluations=15000,
         mutation=BitFlip(probability=0.1), #the best according to our test
         crossover=SP(probability=0.8),#the best according to our test
         selection=BinaryTournamentSelection(comparator=RankingAndCrowdingDistanceComparator())
@@ -32,6 +32,7 @@ if __name__ == '__main__':
     algorithm.run()
     front = algorithm.get_result()
 
+    print (str(algorithm.get_evaluations()))
     ## Plot frontier to file
     ##pareto_front = ScatterMatplotlib(plot_title='NSGAII for IoT-Min', number_of_objectives=problem.number_of_objectives)
     ##pareto_front.plot(front, reference=problem.get_reference_front(), output='NSGAII-IoT-Min', show=False)

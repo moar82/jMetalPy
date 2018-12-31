@@ -61,12 +61,16 @@ class Miniaturization(BinaryProblem):
 
 
     def evaluate(self, solution: BinarySolution) -> BinarySolution:
-        ''' First repair the solution that could have been corrupted through the
+        ''' First apply the mandatory features '''
+        ''' Note that in python the class is pass as reference so the value is modified automatically.  We use tmp variables for readability though.'''
+        validated_solution = self.sf.js_engine_helper.keep_mandatory_features_on_solution(solution.variables[0])
+        ''' Then repair the solution that could have been corrupted through the
             transformation operators'''
         if self.repair_solution==True:
-            repaired_solution = self.sf.js_engine_helper.repair_solution(solution.variables[0])
+            repaired_solution = self.sf.js_engine_helper.repair_solution(validated_solution)
             solution.variables[0] = repaired_solution
-        solution_evaluated = False
+        else:
+            solution.variables[0] = validated_solution
         ppm = self.sf.js_engine_helper.evaluate_solution_performance_(solution.variables[0])
         try:
             if ppm.memory_us[0]!=float('inf'):

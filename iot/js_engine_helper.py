@@ -148,7 +148,7 @@ class JSEngineHelper ():
 
         # f7-f10 requires to be disable together (one-index-based)
         if asolution[6]==True or asolution[7]==True or asolution[8]==True:
-            if random()<0.2:
+            if random()<=0.2:
                 asolution = self.defaultSolution.copy()
                 asolution[6] = True
                 asolution[7] = True
@@ -158,7 +158,7 @@ class JSEngineHelper ():
                 asolution[6] = False
                 asolution[7] = False
                 asolution[8] = False
-                #asolution[9] = True
+                asolution[9] = True
 
         # f14 requires f11 to be disable too (one-index-based)
         if asolution[13]==False:
@@ -187,11 +187,12 @@ class JSEngineHelper ():
         # f24 requires f30 to be deactivated as well
         if asolution[23] == False:
             asolution[29] = False
+        return asolution
 
-        ###now we need to ensure that the mandatory features are not altered
+    def keep_mandatory_features_on_solution(self, asolution):
+        ###we need to ensure that the mandatory features are not altered
         for feature in self.bc.mandatory_features:
-            asolution[feature-1] = self.defaultSolution[feature-1]
-
+            asolution[feature - 1] = self.defaultSolution[feature - 1]
         return asolution
 
     def get_out(self,*args):
