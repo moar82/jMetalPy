@@ -12,7 +12,7 @@ if __name__ == '__main__':
         sys.exit(1)
     else:
         problem.run_id = '_' + sys.argv[1] # we use this value to name the solution output
-    problem.repair_solution = False
+    problem.repair_solution = True
     problem.script = sys.argv[2]  # we parametrize the script
     algorithm = RandomSearch(
         problem=problem,
