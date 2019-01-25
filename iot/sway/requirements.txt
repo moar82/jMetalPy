@@ -1,0 +1,6 @@
+numpy
+deap
+requests
+gmpy2
+pycosat
+

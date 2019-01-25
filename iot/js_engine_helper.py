@@ -136,6 +136,7 @@ class JSEngineHelper ():
         self.cwd = cwd
         self.bc = bc
         self.tested_solutions = {}
+        self.tested_solutions_var ={}
         self.run_id = None
 
 
@@ -213,6 +214,7 @@ class JSEngineHelper ():
         string_sol = ''.join(str(int(e)) for e in asolution)
         decimal_rep_asolution = int(string_sol,2)
         if decimal_rep_asolution in self.tested_solutions:
+            print (str(self.tested_solutions_var.get(decimal_rep_asolution)))
             ppm.code_size =  self.tested_solutions.get(decimal_rep_asolution)[0]
             ppm.memory_us = self.tested_solutions.get(decimal_rep_asolution)[1]
             ppm.execution_time = self.tested_solutions.get(decimal_rep_asolution)[2]
@@ -295,6 +297,7 @@ class JSEngineHelper ():
                         break
                     ppm.execution_time.append(float(coltemp[1].replace("\"","").strip()))
                 self.tested_solutions[decimal_rep_asolution]= [ppm.code_size,ppm.memory_us,ppm.execution_time]
+                self.tested_solutions_var[decimal_rep_asolution]=asolution
             else:
                 ts = time.time()
                 self.plog.logError(
