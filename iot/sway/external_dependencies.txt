@@ -1,0 +1,5 @@
+sudo dnf install -y  python3-devel
+sudo dnf install -y gmp-devel
+sudo dnf install -y mpfr-devel
+sudo dnf -y install libmpc-devel
+
