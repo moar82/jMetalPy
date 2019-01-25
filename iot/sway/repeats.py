@@ -33,13 +33,13 @@ def request_new_file(folder, model_name):
         folder = folder[:-1]
 
     files = [f for f in os.listdir(folder) if isfile(join(folder, f))]
-    existed = [f for f in files if '_'+model_name+'_' in f]
+    existed = [f for f in files if '_' + model_name + '_' in f]
     if len(existed) == 0:
-        return folder+'/'+model_name+'_1.txt'
+        return folder + '/_' + model_name + '_1.txt'
     else:
         i = [int(e.split('_')[2].split('.')[0]) for e in existed]
         i = max(i) + 1
-        return folder+'/_'+model_name+'_' + str(i) + '.txt'
+        return folder + '/_' + model_name + '_' + str(i) + '.txt'
 
 
 def fetch_all_files(folder, model_name):
