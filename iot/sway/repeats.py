@@ -42,6 +42,8 @@ def request_new_file(folder, model_name):
         return folder + '/_' + model_name + '_' + str(i) + '.txt'
 
 
+
+
 def fetch_all_files(folder, model_name):
     if folder[-1] == '/':
         folder = folder[:-1]

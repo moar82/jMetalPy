@@ -113,7 +113,7 @@ class DimacsModel:
         device_storage = float(val[3])
         return ((ppm.memory_us[0] - device_memory) / device_memory + (ppm.code_size[0] - device_storage) / device_storage) / 2
 
-    def eval_ind(self, ind):
+    def eval_ind(self, ind, objectives=4):
         """
         return the fitness, but it might be no needed.
         Args:
@@ -122,58 +122,84 @@ class DimacsModel:
         Returns:
 
         """
-
         '''Convert the individual to a list of booleans'''
-
         solint = [int(x,2) for x in ind]
         sol = [bool(x) for x in solint]
         # validated_solution = self.sf.js_engine_helper.\
         #     keep_mandatory_features_on_solution(sol)
         ppm = self.sf.js_engine_helper.evaluate_solution_performance_(sol)
-        try:
-            if ppm.memory_us[0] != float('inf'):
-                median_execution_time = median(ppm.execution_time)
-                '''Compute DSR of each  device'''
-                usr_list = []
-                dsr = []
-                cval_max = -1.0
-                for val in self.sf.bc.devices:
-                    device_value = float(val[6])
-                    dsr.append((self.compute_dsr(ppm, val), device_value))
-                    if device_value > cval_max:
-                        cval_max = device_value
-                ''' Compute USR'''
-                for val in dsr:
-                    usr_list.append(val[0] * (val[1] / cval_max))
-                '''We normalize the code with the original measurements '''
-                ind.fitness.values = (
-                    self.__compute_delta \
-                        (self.sf.bc.file_size_org, ppm.code_size[0]),  # this does not vary through executions
-                    self.__compute_delta \
-                        (self.sf.bc.mem_us_org, ppm.memory_us[0]),  # this does not vary through executions
-                    self.__compute_delta \
-                        (self.sf.bc.use_time_avg, median_execution_time),
-                    mean(usr_list)
-                )
-                # solution.objectives[3] = mean ( usr_list )
-            else:
+        if objectives==3:
+            try:
+                if ppm.memory_us[0] != float('inf'):
+                    median_execution_time = median(ppm.execution_time)
+                    '''Compute DSR of each  device'''
+                    usr_list = []
+                    dsr = []
+                    cval_max = -1.0
+                    for val in self.sf.bc.devices:
+                        device_value = float(val[6])
+                        dsr.append((self.compute_dsr(ppm, val), device_value))
+                        if device_value > cval_max:
+                            cval_max = device_value
+                    ''' Compute USR'''
+                    for val in dsr:
+                        usr_list.append(val[0] * (val[1] / cval_max))
+                    '''We normalize the code with the original measurements '''
+                    ind.fitness.values = (
+                        self.__compute_delta \
+                            (self.sf.bc.file_size_org, ppm.code_size[0]),  # this does not vary through executions
+                        self.__compute_delta \
+                            (self.sf.bc.mem_us_org, ppm.memory_us[0]),  # this does not vary through executions
+                        self.__compute_delta \
+                            (self.sf.bc.use_time_avg, median_execution_time),
+                        mean(usr_list)
+                    )
+                else:
+                    '''we penalized the solution since it broke the execution'''
+                    ind.fitness.values = (
+                    float('inf'),
+                    float('inf'),
+                    float('inf'),
+                    float('inf')
+                    )
+                    # solution.objectives[3] = float('inf')
+                print(str(ind.fitness.values))
+            except TypeError:
                 '''we penalized the solution since it broke the execution'''
                 ind.fitness.values = (
-                float('inf'),
-                float('inf'),
-                float('inf'),
-                float('inf')
+                    float('inf'),
+                    float('inf'),
+                    float('inf'),
+                    float('inf')
                 )
-                # solution.objectives[3] = float('inf')
-            print(str(ind.fitness.values))
-        except TypeError:
-            '''we penalized the solution since it broke the execution'''
-            ind.fitness.values = (
-                float('inf'),
-                float('inf'),
-                float('inf'),
-                float('inf')
-            )
+        else:
+            try:
+                if ppm.memory_us[0] != float('inf'):
+                    median_execution_time = median(ppm.execution_time)
+                    '''We normalize the code with the original measurements '''
+                    ind.fitness.values = (
+                        self.__compute_delta \
+                            (self.sf.bc.file_size_org, ppm.code_size[0]),  # this does not vary through executions
+                        self.__compute_delta \
+                            (self.sf.bc.mem_us_org, ppm.memory_us[0]),  # this does not vary through executions
+                        self.__compute_delta \
+                            (self.sf.bc.use_time_avg, median_execution_time)
+                    )
+                else:
+                    '''we penalized the solution since it broke the execution'''
+                    ind.fitness.values = (
+                    float('inf'),
+                    float('inf'),
+                    float('inf')
+                    )
+                print(str(ind.fitness.values))
+            except TypeError:
+                '''we penalized the solution since it broke the execution'''
+                ind.fitness.values = (
+                    float('inf'),
+                    float('inf'),
+                    float('inf')
+                )
             # solution.objectives[3] = float('inf')
         return ind.fitness.values
 

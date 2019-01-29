@@ -98,7 +98,8 @@ def sat_gen_valid_pop(fm, n):
         for index, sol in enumerate(pycosat.itersolve(cnf,vars=fm.featureNum)):
             new_ind = fm.Individual(''.join(['1' if i > 0 else '0' for i in sol]))
             pops.append(new_ind)
-            if index > 20:
+            #if index > 20:
+            if index > 2:
                 break
         for x in cnf:
             random.shuffle(x)
@@ -115,7 +116,7 @@ def get_sway_res(model):
     #         can = model.Individual(l.strip('\n'))
     #         candidates.append(can)
 
-    candidates = sat_gen_valid_pop(model, 10000)
+    candidates = sat_gen_valid_pop(model, 4)
     res = sway(candidates, model.eval, partial(split_products, groupC=min(15, model.featureNum // 7)), comparing)
     return res
 
@@ -137,17 +138,20 @@ if __name__ == '__main__':
             # save the results
             os.chdir(cwd)
             os.system('mkdir -p tse_rs/sway')
-            with open(request_new_file('./tse_rs/sway', name), 'w') as f:
-                #f.write('T:' + str(start_time) + '\n~~~\n')
-                #f.write('T:' + str(finish_time) + '\n')
+            with open('./tse_rs/sway/SWAY.' +  name + '_time' + '_' + sys.argv[1], 'w') as f:
                 elapsed_time = finish_time - start_time
                 f.write('elapsed time (seconds):' + str(elapsed_time) + '\n')
-                print ('elapsed time (seconds):' + str(elapsed_time) + '\n')
+                print('elapsed time (seconds):' + str(elapsed_time) + '\n')
+            '''FUN.NSGAII.crypto-aes.js.1.Miniaturization'''
+            with open('./tse_rs/sway/' + 'FUN.SWAY.' + sys.argv[2] + '.'  +
+                      sys.argv[1] + '.Miniaturization', 'w') as f:
                 for i in res:
                     f.write(' '.join(map(str, i.fitness.values)))
                     f.write('\n')
             '''pending to save solutions obtained as well'''
-            with open(request_new_file('./tse_rs/sway', 'VAR.SWAY.'+name), 'w') as f:
+
+            with open('./tse_rs/sway/' + 'VAR.SWAY.' + sys.argv[2] + '.' +
+                      sys.argv[1] + '.Miniaturization', 'w') as f:
                 for i in res:
                     solint = [int(x, 2) for x in i]
                     sol = [bool(x) for x in solint]
