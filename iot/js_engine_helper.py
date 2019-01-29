@@ -212,9 +212,10 @@ class JSEngineHelper ():
         ppm = ProgramPerformanceMetrics()
         ''' validate if the solution was not already evaluated to avoid reevaluting solutions'''
         string_sol = ''.join(str(int(e)) for e in asolution)
+        string_readable = ','.join(e for e in string_sol)
         decimal_rep_asolution = int(string_sol,2)
         if decimal_rep_asolution in self.tested_solutions:
-            print (str(self.tested_solutions_var.get(decimal_rep_asolution)))
+            print (string_readable)
             ppm.code_size =  self.tested_solutions.get(decimal_rep_asolution)[0]
             ppm.memory_us = self.tested_solutions.get(decimal_rep_asolution)[1]
             ppm.execution_time = self.tested_solutions.get(decimal_rep_asolution)[2]

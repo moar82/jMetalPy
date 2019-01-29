@@ -95,7 +95,7 @@ def sat_gen_valid_pop(fm, n):
     pops = list()
     cnf = copy.deepcopy(fm.cnfs)
     while len(pops) < n:
-        for index, sol in enumerate(pycosat.itersolve(cnf)):
+        for index, sol in enumerate(pycosat.itersolve(cnf,vars=fm.featureNum)):
             new_ind = fm.Individual(''.join(['1' if i > 0 else '0' for i in sol]))
             pops.append(new_ind)
             if index > 20:
@@ -142,6 +142,7 @@ if __name__ == '__main__':
                 #f.write('T:' + str(finish_time) + '\n')
                 elapsed_time = finish_time - start_time
                 f.write('elapsed time (seconds):' + str(elapsed_time) + '\n')
+                print ('elapsed time (seconds):' + str(elapsed_time) + '\n')
                 for i in res:
                     f.write(' '.join(map(str, i.fitness.values)))
                     f.write('\n')

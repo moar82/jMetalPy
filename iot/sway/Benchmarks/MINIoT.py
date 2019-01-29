@@ -6,7 +6,7 @@ import os
 from  script_features import ScriptFeatures
 import requests
 import pdb
-from statistics import median
+from statistics import median, mean
 
 
 sign = lambda x: '1' if x > 0 else '0'
@@ -96,7 +96,7 @@ class DimacsModel:
         #     self.used_before.append(bool(int(b)))
         #     self.defects.append(int(c))
 
-        creator.create("FitnessMin", base.Fitness, weights=[-1.0] * 3)
+        creator.create("FitnessMin", base.Fitness, weights=[-1.0] * 4) #4 objectives
         creator.create("Individual", str, fitness=creator.FitnessMin)
 
         self.creator = creator
@@ -133,15 +133,6 @@ class DimacsModel:
         try:
             if ppm.memory_us[0] != float('inf'):
                 median_execution_time = median(ppm.execution_time)
-                '''We normalize the code with the original measurements '''
-                ind.fitness.values = (
-                self.__compute_delta \
-                    (self.sf.bc.file_size_org, ppm.code_size[0]),  # this does not vary through executions
-                self.__compute_delta \
-                    (self.sf.bc.mem_us_org, ppm.memory_us[0]),  # this does not vary through executions
-                self.__compute_delta \
-                    (self.sf.bc.use_time_avg, median_execution_time)
-                )
                 '''Compute DSR of each  device'''
                 usr_list = []
                 dsr = []
@@ -154,10 +145,21 @@ class DimacsModel:
                 ''' Compute USR'''
                 for val in dsr:
                     usr_list.append(val[0] * (val[1] / cval_max))
+                '''We normalize the code with the original measurements '''
+                ind.fitness.values = (
+                    self.__compute_delta \
+                        (self.sf.bc.file_size_org, ppm.code_size[0]),  # this does not vary through executions
+                    self.__compute_delta \
+                        (self.sf.bc.mem_us_org, ppm.memory_us[0]),  # this does not vary through executions
+                    self.__compute_delta \
+                        (self.sf.bc.use_time_avg, median_execution_time),
+                    mean(usr_list)
+                )
                 # solution.objectives[3] = mean ( usr_list )
             else:
                 '''we penalized the solution since it broke the execution'''
                 ind.fitness.values = (
+                float('inf'),
                 float('inf'),
                 float('inf'),
                 float('inf')
@@ -167,6 +169,7 @@ class DimacsModel:
         except TypeError:
             '''we penalized the solution since it broke the execution'''
             ind.fitness.values = (
+                float('inf'),
                 float('inf'),
                 float('inf'),
                 float('inf')
