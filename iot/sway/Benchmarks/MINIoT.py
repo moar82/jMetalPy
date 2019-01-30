@@ -128,7 +128,7 @@ class DimacsModel:
         # validated_solution = self.sf.js_engine_helper.\
         #     keep_mandatory_features_on_solution(sol)
         ppm = self.sf.js_engine_helper.evaluate_solution_performance_(sol)
-        if objectives==3:
+        if objectives==4:
             try:
                 if ppm.memory_us[0] != float('inf'):
                     median_execution_time = median(ppm.execution_time)

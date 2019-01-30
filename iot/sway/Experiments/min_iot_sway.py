@@ -98,8 +98,8 @@ def sat_gen_valid_pop(fm, n):
         for index, sol in enumerate(pycosat.itersolve(cnf,vars=fm.featureNum)):
             new_ind = fm.Individual(''.join(['1' if i > 0 else '0' for i in sol]))
             pops.append(new_ind)
-            #if index > 20:
-            if index > 2:
+            if index > 20:
+            #if index > 2:
                 break
         for x in cnf:
             random.shuffle(x)
@@ -116,7 +116,7 @@ def get_sway_res(model):
     #         can = model.Individual(l.strip('\n'))
     #         candidates.append(can)
 
-    candidates = sat_gen_valid_pop(model, 4)
+    candidates = sat_gen_valid_pop(model, 10000)
     res = sway(candidates, model.eval, partial(split_products, groupC=min(15, model.featureNum // 7)), comparing)
     return res
 
