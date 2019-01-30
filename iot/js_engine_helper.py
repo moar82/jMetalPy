@@ -26,9 +26,10 @@ class ProgramPerformanceMetrics:
 class ProgramLog():
     '''This class writes the log of the execution'''
 
-    def __init__(self, cwd: str, experiment_name: str) -> None:
+    def __init__(self, cwd: str, experiment_name: str, algo_name: str) -> None:
         super().__init__()
-        self.logFile = cwd+"/benchmark_" + experiment_name +".log"
+        self.logFile = cwd+"/benchmark_" + experiment_name + '_' + algo_name +\
+                       ".log"
 
     def logError (self, logmessage: str):
         flog = open (self.logFile,"a")

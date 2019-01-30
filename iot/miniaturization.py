@@ -19,7 +19,7 @@ class Miniaturization(BinaryProblem):
       and 3 objectives (code size, memory and size).
     """
 
-    def __init__(self, number_of_variables: int = 1, number_of_objectives=3):
+    def __init__(self, number_of_variables: int = 1, number_of_objectives=4):
         """ :param number_of_variables: number of decision variables of the problem.
         """
         super(Miniaturization, self).__init__()
@@ -50,12 +50,18 @@ class Miniaturization(BinaryProblem):
     @property
     def script(self) -> str:
         return self.__script
+    @property
+    def algo_name(self) -> str:
+        return self.__algo_name
+    @algo_name.setter
+    def algo_name (self, algo_name) -> None:
+        self.__algo_name = algo_name
     @script.setter
     def script (self,script) -> None:
         self.__script= script
         ##call the function to open the configuration file, and store it in the map
         ##to generate the initial solutions
-        self.sf = ScriptFeatures('', script )
+        self.sf = ScriptFeatures('', script, self.algo_name )
         self.sf.run_id =  self.__run_id ###this have to be called after setting the run_id in the client call
         self.sf.read_features_file()
 
@@ -94,20 +100,20 @@ class Miniaturization(BinaryProblem):
                 ''' Compute USR'''
                 for val in dsr:
                     usr_list.append( val[0] * ( val[1] /cval_max )  )
-                #solution.objectives[3] = mean ( usr_list )
+                solution.objectives[3] = mean ( usr_list )
             else:
                 '''we penalized the solution since it broke the execution'''
                 solution.objectives[0] = float('inf')
                 solution.objectives[1] = float('inf')
                 solution.objectives[2] = float('inf')
-                #solution.objectives[3] = float('inf')
+                solution.objectives[3] = float('inf')
             print (solution.objectives)
         except TypeError:
             '''we penalized the solution since it broke the execution'''
             solution.objectives[0] = float('inf')
             solution.objectives[1] = float('inf')
             solution.objectives[2] = float('inf')
-            #solution.objectives[3] = float('inf')
+            solution.objectives[3] = float('inf')
         return solution
 
     def compute_dsr(self, ppm, val):
@@ -135,9 +141,9 @@ class Miniaturization(BinaryProblem):
                 file_size = (solution.objectives[0]*self.sf.bc.file_size_org) +self.sf.bc.file_size_org
                 usr_mem = (solution.objectives[1]*self.sf.bc.mem_us_org) +self.sf.bc.mem_us_org
                 time_usr =(solution.objectives[2]*self.sf.bc.use_time_avg) +self.sf.bc.use_time_avg
-                #dsr = solution.objectives[3]
+                dsr = solution.objectives[3]
                 of.write(str(file_size) + ",")
                 of.write(str(usr_mem) + ",")
                 of.write(str(time_usr) + ",")
-                #of.write(str(dsr))
+                of.write(str(dsr))
                 of.write("\n")

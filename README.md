@@ -20,7 +20,7 @@
 To download jMetalPy just clone the Git repository hosted in GitHub:
 ```bash
 $ git clone https://github.com/jMetal/jMetalPy.git
-$ python3 setup.py install
+$ sudo python3 setup.py install
 ```
 
 Alternatively, you can install it with `pip`:

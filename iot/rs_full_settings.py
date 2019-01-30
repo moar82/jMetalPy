@@ -13,10 +13,11 @@ if __name__ == '__main__':
     else:
         problem.run_id = '_' + sys.argv[1] # we use this value to name the solution output
     problem.repair_solution = True
+    problem.algo_name = 'RS'
     problem.script = sys.argv[2]  # we parametrize the script
     algorithm = RandomSearch(
         problem=problem,
-        max_evaluations=15000
+        max_evaluations=1500
         )
 
 
@@ -39,19 +40,22 @@ if __name__ == '__main__':
     SolutionList.print_variables_to_file(front, 'VAR.RS.' + problem.script + '.' + problem.run_id.replace('_', '') +
 
                                          '.' + problem.get_name())
-    reference_point = [1, 1, 1]
-    #reference_point = [1, 1, 1 ,1]
+    #reference_point = [1, 1, 1]
+    reference_point = [1, 1, 1 ,1]
     hv = HyperVolume(reference_point)
     value = hv.compute(front)
-    with open("HV." + problem.script + '.' +problem.run_id.replace('_','')  + '.' + problem.get_name(), "w") as text_file:
+    with open("HV.RS." + problem.script + '.' +problem.run_id.replace('_','')  + '.' + problem.get_name(), "w") as text_file:
         print(f"{value}", file=text_file)
     print('Algorithm (binary problem): ' + algorithm.get_name())
     print('Problem: ' + problem.get_name())
     print ('HyperVolume: %f' % value)
     ## print('Computing time: ' + str(algorithm.total_computing_time)) not implemented in rs algorithm
-    problem.save_values_achieved(front, 'values_achieved_' + problem.script.split('.')[0] + problem.run_id.replace('_',
+    problem.save_values_achieved(front, 'values_achieved_RS_' + problem.script.split('.')[0] + problem.run_id.replace('_',
                                                                                                                    '') + '.csv')
 
     problem.sf.plog.logError('Run: ' + problem.run_id.replace('_','') + ' js script: ' + problem.script + '\n')
     ##problem.sf.plog.logError('Computing time: ' + str(algorithm.total_computing_time)+ '\n')
-    problem.sf.plog.logError('Repeated solutions:'+str(len(problem.sf.js_engine_helper.tested_solutions))+'\n')
+    problem.sf.plog.logError('Evaluated solutions:'+str(len(problem.sf.js_engine_helper.tested_solutions))+'\n')
+    with open("TIME.RS." + problem.script + '.' +problem.run_id.replace('_','')  + '.' + problem.get_name(), 'w') as f:
+        f.write('Computing time (seconds): ' + str(algorithm.total_computing_time) + '\n')
+    print ('Computing time (seconds): ' + str(algorithm.total_computing_time))

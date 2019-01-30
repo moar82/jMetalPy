@@ -29,11 +29,11 @@ class ScriptFeatures():
     def run_id(self, run_id) -> None:
         self.__run_id = run_id
         self.js_engine_helper.run_id = run_id
-    def __init__(self, wkDir, script):
+    def __init__(self, wkDir, script, algo_name):
         if len(wkDir)>0:
             self.cwd = wkDir
         self.bc = BenchmarkConfiguration(script)
-        self.plog = ProgramLog(self.cwd, self.bc.experiment_name)
+        self.plog = ProgramLog(self.cwd, self.bc.experiment_name, algo_name)
         self.js_engine_helper = JSEngineHelper(self.plog,self.cwd, self.bc)
         self.filewithfeatures = self.bc.filewithfeatures
 
