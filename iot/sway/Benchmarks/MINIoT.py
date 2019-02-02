@@ -73,7 +73,7 @@ class DimacsModel:
         cwd = os.getcwd()
         os.chdir('../..')
         mpath = os.getcwd()
-        self.sf = ScriptFeatures(mpath, self.script)
+        self.sf = ScriptFeatures(mpath, self.script, "SWAY")
         os.chdir(cwd)
         self.sf.run_id = self.run_id  ###this have to be called after setting the run_id in the client call
         self.sf.read_features_file()
