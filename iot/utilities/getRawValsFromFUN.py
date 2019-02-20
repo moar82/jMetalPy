@@ -1,7 +1,7 @@
 
 
 """
-.. module:: miniaturization
+.. module:: Get raw values from FUN files (percentage improvement)
    :platform: Unix, Windows
    synopsis: This script take as input a FUN.* file and retrieves the raw values
    measured based on the original measurements
@@ -14,6 +14,7 @@ from pathlib import Path
 '''Hardcoded settings'''
 directory_in_str = '/home/moar82/Documents/iot_miniaturization/results/sunspider/tunning_hv_server_173'
 directory_for_org_measurements = '/home/moar82/Documents/iot_miniaturization/results/sunspider/default_duktape_measurements'
+nb_of_objectives =4
 
 directory = os.fsencode(directory_in_str)
 os.system('mkdir -p ' + directory_in_str + '/val_files/')
@@ -48,24 +49,40 @@ for path in pathlist:
     numlines = len(fun_file.readlines())
     fun_file.close()
     with open (path_in_str ,'r') as fun_file:
-        #numlines = 16
         csvreader = csv.reader(fun_file,delimiter=' ')
         w, h = 4, numlines
         Matrix = [['' for x in range(w)] for y in range(h)]
         idx = 0
-        for line in csvreader:
-            try:
-                file_size_improv = float(line[0])*file_size_org+file_size_org
-                mem_us_improv = float(line[1])*mem_us_org+mem_us_org
-                use_time_improve = float(line[2])*use_time_avg+use_time_avg
-                usr_rate = float(line[3])
-            except ValueError:
-                print("Oops!  That was no valid number in" +fun_file)
-            Matrix[idx][0] = str(file_size_improv)
-            Matrix[idx][1] = str(mem_us_improv)
-            Matrix[idx][2] = str(use_time_improve)
-            Matrix[idx][3] = str(usr_rate)
-            idx = idx+1
+
+        if (nb_of_objectives==4):
+            for line in csvreader:
+                try:
+                    file_size_improv = float(line[0])*file_size_org+file_size_org
+                    mem_us_improv = float(line[1])*mem_us_org+mem_us_org
+                    use_time_improve = float(line[2])*use_time_avg+use_time_avg
+                    usr_rate = float(line[3])
+                except ValueError:
+                    print("Oops!  That was no valid number in" +fun_file)
+                Matrix[idx][0] = str(file_size_improv)
+                Matrix[idx][1] = str(mem_us_improv)
+                Matrix[idx][2] = str(use_time_improve)
+                Matrix[idx][3] = str(usr_rate)
+                idx = idx+1
+        elif (nb_of_objectives==3):
+            for line in csvreader:
+                try:
+                    file_size_improv = float(line[0])*file_size_org+file_size_org
+                    mem_us_improv = float(line[1])*mem_us_org+mem_us_org
+                    use_time_improve = float(line[2])*use_time_avg+use_time_avg
+                except ValueError:
+                    print("Oops!  That was no valid number in" +fun_file)
+                Matrix[idx][0] = str(file_size_improv)
+                Matrix[idx][1] = str(mem_us_improv)
+                Matrix[idx][2] = str(use_time_improve)
+                idx = idx+1
+        else :
+            print ('Error, nb of objectives invalid!')
+            os.system.exit()
     ''' now save the computed raw values in a new file'''
     new_raw_file = directory_in_str + '/val_files/' + 'VAL.' + prefix + '.'  + script_name + '.js.' + str(consecutive)
     fout = open(new_raw_file, "w")
