@@ -15,8 +15,9 @@ from pathlib import Path
 """
 
 '''Hardcoded settings'''
-directory_in_str = '/home/moar82/Documents/iot_miniaturization/results/sunspider/tunning_hv_server_173'
+directory_in_str = '/home/moar82/Documents/iot_miniaturization/results/sunspider/RS_server106_3d-cube-3obj-15000-ev'
 prefix = 'FUN'
+nbofRuns = 10
 
 
 directory = os.fsencode(directory_in_str)
@@ -35,8 +36,8 @@ for path in pathlist:
             ''' we add it to the set'''
             set_of_scripts.add(script_name)
             et = []
-            ''' we start to iterating 29 times over all the runs of this script'''
-            for index in range (1, 30):
+            ''' we start to iterating nbofRuns times over all the runs of this script'''
+            for index in range (1, nbofRuns):
                 temp_name = copy.deepcopy(script_path)
                 temp_name[4] = str(index)
                 f1 = ".".join(temp_name)
