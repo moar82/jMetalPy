@@ -1,7 +1,7 @@
 
 # MoMITPy: Python implementation of MoMIT a multiobjective Miniaturization approach for IoT 
 
-MoMITPy is a tool that allows you to miniaturize (reduce the memory and size footprint) of a JavaScript interpreter to fit on highly constrained IoT devices.  It relies on [Duktape JS embedded engine]().  
+MoMITPy is a tool that allows you to miniaturize (reduce the memory and size footprint) of a JavaScript interpreter to fit on highly constrained IoT devices.  It relies on [Duktape JS engine](https://duktape.org/).  
 
 To perform the miniaturization of a JS interpreter, MoMITPy uses the mandatory code features of JS file that you want to execute, and the list of IoT'devices hardware requirements to select the best combination of code features to execute your JS file without modifying the source code.  Since, MoMITPy is multiobjective, it generates more than one solution, targeting the ones that can be deployed in more devices from the IoT devices list you provide.
 
