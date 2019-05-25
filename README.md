@@ -39,19 +39,27 @@ In this example we use benchmark_date-fromat-tofte.js from [Sunspider testbed](h
 
 * confOpt.csv file.  This file contains the Duktape code features that we want to combine.
 These are the columns required for this file.
+  * **id**: is a sequential number
+  * **property**: is the name according to duktape
+  * **default**: the default value of duktape for this property.
+  * **activated in**: from which profile we take this configuration 
+  * **value in**: the value that we want to experiment with
+  * **category**: the category assigned by duktape.
+  * **zero-index-base_id**: id -1
 
-**id**: is a sequential number
-**property**: is the name according to duktape
-**default**: the default value of duktape for this property.
-**activated in**: from which profile we take this configuration 
-**value in**: the value that we want to experiment with
-**category**: the category assigned by duktape.
-**zero-index-base_id**: id -1
-
-A CSV 
-
-
-
+* A CSV containing the mandatory features of the javascript file to execute.  for our example, the name is testbed_required_features.csv, which contains the following columns:
+  *  **Script**: the name of the javascript(s) to execute
+  *  **RequiredFeaturesWithDefaulValue**: the mandatory features
+  *  **RequiredFeaturesWithDefaulValueOriginal**: this field is not longer used.
+  
+* A file with the hardware characteristics of the IoT constrained devices where you want to deploy your js interpreter.  it contains the following columns:
+  * device_id
+  * device_name:
+  * memory_capacity:
+  * storage_capacity:
+  * wifi_integrated: this field is not used by our approach
+  * price: this field is not used by our approach
+  * val: preference assigned from the user typically 1 to n.  The higher the value, the most that you want to use it to deploy your javascript file on this device.
 
 ## Usage
 ```bash
