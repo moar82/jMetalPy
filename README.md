@@ -122,8 +122,6 @@ The current release of MoMITPy  contains the following components:
 MoMITPy is the product of research at Concordia University in Montreal Canada in the Ptidej Lab.
 If you want to use out tool, please cite the following paper:
 
-[RePOR: Mimicking humans on refactoring tasks. Are we there yet?](https://arxiv.org/abs/1808.04352)
-
 For a complete list of works please visit my [personal web site](https://moar82.github.io/#portfolio)
 
 
