@@ -67,6 +67,8 @@ These are the columns required for this file.
   * wifi_integrated: this field is not used by our approach
   * price: this field is not used by our approach
   * val: preference assigned from the user typically 1 to n.  The higher the value, the most that you want to use it to deploy your javascript file on this device.
+  
+ *  A **harness.C** file that will embedded Duktape interpreter to execute (and mesure memory usage) of the JavaScript you wnat to deploy.
 
 ## Usage
 ```bash
