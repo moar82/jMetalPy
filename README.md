@@ -9,12 +9,11 @@ MoMITPy relios on [JMetalPy](https://github.com/jMetal/jMetalPy.git) metaheurist
 
 ## Table of Contents
 - [Installation](#installation)
-- [Input Files](#input Files)
+- [Input Files](#input-files)
 - [Usage](#usage)
-- [Output Files](#output Files)
+- [Output Files](#output-files)
 - [Features](#features)
 - [Research](#research)
-- [Replication package](#replication)
 - [License](#license)
 
 ## Installation
