@@ -1,0 +1,87 @@
+id,propertiy,default,activated in,value in,category,zero-index-base_id
+1,DUK_USE_ALLOW_UNDEFINED_BEHAVIOR,false,low_memory.yaml,true,Platform and portability options,0
+2,DUK_USE_FATAL_MAXLEN,128,low_memory.yaml,64,Platform and portability options,1
+3,DUK_USE_EXEC_PREFER_SIZE,false,low_memory.yaml,true,low Memory management options,2
+4,DUK_USE_LEXER_SLIDING_WINDOW,true,low_memory.yaml,false,low Memory management options,3
+5,DUK_USE_LIGHTFUNC_BUILTINS,false,low_memory.yaml,true,low Memory management options,4
+6,DUK_USE_PREFER_SIZE,false,low_memory.yaml,true,low Memory management options,5
+7,DUK_USE_ROM_STRINGS,false,low_memory.yaml,true,low Memory management options,6
+8,DUK_USE_ROM_OBJECTS,false,low_memory.yaml,true,low Memory management options,7
+9,DUK_USE_ROM_GLOBAL_INHERIT,false,low_memory.yaml,true,low Memory management options,8
+10,DUK_USE_HSTRING_ARRIDX,true,low_memory.yaml,false,low Memory management options,9
+11,DUK_USE_REFERENCE_COUNTING,true,comented out in low_memory.yaml,false,Garbage collection options,10
+12,DUK_USE_PARANOID_ERRORS,false,low_memory.yaml,true,ECMAScript Edition 5 (ES5) options,11
+13,DUK_USE_FUNC_NAME_PROPERTY,true,comented out in low_memory.yaml,false,ECMAScript Edition 5 (ES5) options,12
+14,DUK_USE_DOUBLE_LINKED_HEAP,true,comented out in low_memory.yaml,false,ECMAScript Edition 5 (ES5) options,13
+15,DUK_USE_ARRAY_BUILTIN,true,low_memory_strip.yaml,false,ECMAScript Edition 5 (ES5) options,14
+16,DUK_USE_AUGMENT_ERROR_CREATE,true,low_memory.yaml,false,ECMAScript Edition 5 (ES5) options,15
+17,DUK_USE_AUGMENT_ERROR_THROW,true,low_memory.yaml,false,ECMAScript Edition 5 (ES5) options,16
+18,DUK_USE_BOOLEAN_BUILTIN,true,low_memory_strip.yaml,false,ECMAScript Edition 5 (ES5) options,17
+19,DUK_USE_DATE_BUILTIN,true,low_memory_strip.yaml,false,ECMAScript Edition 5 (ES5) options,18
+20,DUK_USE_ERRCREATE,true,low_memory.yaml,false,ECMAScript Edition 5 (ES5) options,19
+21,DUK_USE_ERRTHROW,true,low_memory.yaml,false,ECMAScript Edition 5 (ES5) options,20
+22,DUK_USE_FUNCTION_BUILTIN,true,low_memory_strip.yaml,false,ECMAScript Edition 5 (ES5) options,21
+23,DUK_USE_FUNC_FILENAME_PROPERTY,true,low_memory.yaml,false,ECMAScript Edition 5 (ES5) options,22
+24,DUK_USE_GLOBAL_BUILTIN,true,low_memory_strip.yaml,false,ECMAScript Edition 5 (ES5) options,23
+25,DUK_USE_JC,true,low_memory.yaml,false,ECMAScript Edition 5 (ES5) options,24
+26,DUK_USE_JSON_BUILTIN,true,low_memory_strip.yaml,false,ECMAScript Edition 5 (ES5) options,25
+27,DUK_USE_JSON_SUPPORT,true,low_memory_strip.yaml,false,ECMAScript Edition 5 (ES5) options,26
+28,DUK_USE_JX,true,low_memory.yaml,false,ECMAScript Edition 5 (ES5) options,27
+29,DUK_USE_MATH_BUILTIN,true,low_memory_strip.yaml,false,ECMAScript Edition 5 (ES5) options,28
+30,DUK_USE_NUMBER_BUILTIN,true,low_memory_strip.yaml,false,ECMAScript Edition 5 (ES5) options,29
+31,DUK_USE_OBJECT_BUILTIN,true,low_memory_strip.yaml,false,ECMAScript Edition 5 (ES5) options,30
+32,DUK_USE_REGEXP_SUPPORT,true,low_memory_strip.yaml,false,ECMAScript Edition 5 (ES5) options,31
+33,DUK_USE_SOURCE_NONBMP,true,low_memory.yaml,false,ECMAScript Edition 5 (ES5) options,32
+34,DUK_USE_STRING_BUILTIN,true,low_memory_strip.yaml,false,ECMAScript Edition 5 (ES5) options,33
+35,DUK_USE_TRACEBACKS,true,low_memory.yaml,false,ECMAScript Edition 5 (ES5) options,34
+36,DUK_USE_VERBOSE_ERRORS,true,low_memory.yaml,false,ECMAScript Edition 5 (ES5) options,35
+37,DUK_USE_PC2LINE,true,low_memory_strip.yaml,false,ECMAScript Edition 5 (ES5) options,36
+38,DUK_USE_VERBOSE_EXECUTOR_ERRORS,true,low_memory.yaml,false,ECMAScript Edition 5 (ES5) options,37
+39,DUK_USE_BYTECODE_DUMP_SUPPORT,true,low_memory.yaml,false,API options,38
+40,DUK_USE_BASE64_SUPPORT,true,low_memory.yaml,false,Codecs,39
+41,DUK_USE_HEX_SUPPORT,true,low_memory.yaml,false,Codecs,40
+42,DUK_USE_DUKTAPE_BUILTIN,true,low_memory_strip.yaml,false,Duktape specific options,41
+43,DUK_USE_BUFFEROBJECT_SUPPORT,true,low_memory.yaml,false,ECMAScript 2015 (ES6) options,42
+44,DUK_USE_ES6,true,low_memory.yaml,false,ECMAScript 2015 (ES6) options,43
+45,DUK_USE_ES6_PROXY,true,low_memory.yaml,false,ECMAScript 2015 (ES6) options,44
+46,DUK_USE_ES6_UNICODE_ESCAPE,true,low_memory.yaml,false,ECMAScript 2015 (ES6) options,45
+47,DUK_USE_HTML_COMMENTS,true,low_memory.yaml,false,ECMAScript 2015 (ES6) options,46
+48,DUK_USE_SHEBANG_COMMENTS,true,low_memory.yaml,false,ECMAScript 2015 (ES6) options,47
+49,DUK_USE_REFLECT_BUILTIN,true,low_memory.yaml,false,ECMAScript 2015 (ES6) options,48
+50,DUK_USE_SYMBOL_BUILTIN,true,low_memory.yaml,false,ECMAScript 2015 (ES6) options,49
+51,DUK_USE_ES7,true,low_memory.yaml,false,ECMAScript 2016 (ES7) options,50
+52,DUK_USE_ES7_EXP_OPERATOR,true,low_memory.yaml,false,ECMAScript 2016 (ES7) options,51
+53,DUK_USE_ES8,true,low_memory.yaml,false,ECMAScript 2017 (ES8) options,52
+54,DUK_USE_ES9,true,low_memory.yaml,false,ECMAScript 2018 (ES9) options,53
+55,DUK_USE_ENCODING_BUILTINS,true,low_memory.yaml,false,ECMAScript 2018 (ES9) options,54
+56,DUK_USE_ARRAY_FASTPATH,true,low_memory.yaml,false,Perfomance options,55
+57,DUK_USE_ARRAY_PROP_FASTPATH,true,low_memory.yaml,false,Perfomance options,56
+58,DUK_USE_BASE64_FASTPATH,true,low_memory.yaml,false,Perfomance options,57
+59,DUK_USE_CACHE_ACTIVATION,true,low_memory.yaml,false,Perfomance options,58
+60,DUK_USE_CACHE_CATCHER,true,low_memory.yaml,false,Perfomance options,59
+61,DUK_USE_FAST_REFCOUNT_DEFAULT,true,low_memory.yaml,false,Perfomance options,60
+62,DUK_USE_HEX_FASTPATH,true,low_memory.yaml,false,Perfomance options,61
+63,DUK_USE_HOBJECT_HASH_PROP_LIMIT,8,low_memory.yaml,64,Perfomance options,62
+64,DUK_USE_HSTRING_LAZY_CLEN,true,low_memory.yaml,false,Perfomance options,63
+65,DUK_USE_IDCHAR_FASTPATH,true,low_memory.yaml,false,Perfomance options,64
+66,DUK_USE_JSON_QUOTESTRING_FASTPATH,true,low_memory.yaml,false,Perfomance options,65
+67,DUK_USE_JSON_DECSTRING_FASTPATH,true,low_memory.yaml,false,Perfomance options,66
+68,DUK_USE_JSON_DECNUMBER_FASTPATH,true,low_memory.yaml,false,Perfomance options,67
+69,DUK_USE_JSON_EATWHITE_FASTPATH,true,low_memory.yaml,false,Perfomance options,68
+70,DUK_USE_LITCACHE_SIZE,256,low_memory.yaml,false,Perfomance options,69
+71,DUK_USE_REGEXP_CANON_BITMAP,true,low_memory.yaml,false,Perfomance options,70
+72,DUK_USE_STRTAB_MINSIZE,1024,low_memory.yaml,128,Perfomance options,71
+73,DUK_USE_STRTAB_MAXSIZE,268435456,low_memory.yaml,128,Perfomance options,72
+74,DUK_USE_STRTAB_SHRINK_LIMIT,6,low_memory.yaml,0,Perfomance options,73
+75,DUK_USE_STRTAB_GROW_LIMIT,17,low_memory.yaml,65536,Perfomance options,74
+76,DUK_USE_VALSTACK_GROW_SHIFT,2,low_memory.yaml,false,Perfomance options,75
+77,DUK_USE_VALSTACK_SHRINK_CHECK_SHIFT,2,low_memory.yaml,false,Perfomance options,76
+78,DUK_USE_VALSTACK_SHRINK_SLACK_SHIFT,4,low_memory.yaml,false,Perfomance options,77
+79,DUK_USE_VALSTACK_UNSAFE,false,low_memory.yaml,true,Perfomance options,78
+80,DUK_USE_DEBUG_BUFSIZE,65536,low_memory.yaml,2048,Debugger options,79
+81,DUK_USE_COROUTINE_SUPPORT,true,low_memory.yaml,false,Execution options,80
+82,DUK_USE_PERFORMANCE_BUILTIN,true,low_memory.yaml,false,Performance API (High Resolution Time),81
+83,DUK_USE_VOLUNTARY_GC,true,timing_sensitive.yaml,false,,82
+84,DUK_USE_FASTINT,false,performance_sensitive.yaml,true,,83
+85,DUK_USE_JSON_STRINGIFY_FASTPATH,false,performance_sensitive.yaml,true,,84
+86,DUK_USE_REGEXP_CANON_WORKAROUND,false,performance_sensitive.yaml,true,,85

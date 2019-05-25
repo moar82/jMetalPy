@@ -1,0 +1,6 @@
+device_id,device_name,memory_capacity,storage_capacity,wifi_integrated,price,val
+1,Particle Photon,128000,1000000,yes,19,5
+2,ESP32,512000,4000000,yes,19.95,4
+3,mesh Bee (same philips hue architecture),32000,256000,no,26.95,3
+4,RaspBerry PI 3 ModelB+,1000000000,16000000000,yes,54.4,2
+5,BeagleBone,256000000,4000000000,yes,89,1
