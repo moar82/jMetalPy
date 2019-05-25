@@ -1,9 +1,10 @@
 
-# MoMITPy: Python implementation of MoMIT a multiobjective Miniaturization approach for IoT 
+# MoMITPy: Python implementation of MoMIT
 
 MoMITPy is a tool that allows you to miniaturize (reduce the memory and size footprint) of a JavaScript interpreter to fit on highly constrained IoT devices.  It relies on [Duktape JS engine](https://duktape.org/).  
 
-To perform the miniaturization of a JS interpreter, MoMITPy uses the mandatory code features of JS file that you want to execute, and the list of IoT'devices hardware requirements to select the best combination of code features to execute your JS file without modifying the source code.  Since, MoMITPy is multiobjective, it generates more than one solution, targeting the ones that can be deployed in more devices from the IoT devices list you provide.
+To perform the miniaturization of a JS interpreter, MoMITPy uses the mandatory code features of a JavaScript program that you want to execute, and the list of IoT'devices hardware requirements to select the best combination of code features to execute your JS without modifying the source code.  
+Since, MoMITPy is multiobjective, it generates more than one solution, targeting the ones that can be deployed in more devices from the IoT devices list you provide.
 
 MoMITPy relios on [JMetalPy](https://github.com/jMetal/jMetalPy.git) metaheuristic framework.
 
@@ -26,9 +27,10 @@ To install Duktape refer to the existing documentation at: [https://duktape.org/
 
 Note that you will need to provide the **path to the installation of duktape later.**
 
-The scripts for running MoMITPy are located on the /iot subfolder
-Suppose that you have a javascript file called date-format-tofte.js (located on the iot subfolder), 
-and want to execute one run using hybrid random search metaheuristic.
+The scripts for running MoMITPy are located on the **/iot** subfolder
+
+In this Readme file we suppose that you have a javascript file called date-format-tofte.js (located on the iot subfolder), that you want to miniaturize to run on several constrained IoT devices.  For that purpose, you will execute one single run of hybrid random search metaheuristic to generate a set of duktape interpreters that can run your JavaScript, and which minimize the use of code footprint (of the interpreter), memory usage (of the javascript) and execution time.
+
 
 ## Input Files
 
