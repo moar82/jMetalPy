@@ -29,7 +29,9 @@ Note that you will need to provide the **path to the installation of duktape lat
 
 The scripts for running MoMITPy are located on the **/iot** subfolder
 
-In this Readme file we suppose that you have a javascript file called date-format-tofte.js (located on the iot subfolder), that you want to miniaturize to run on several constrained IoT devices.  For that purpose, you will execute one single run of hybrid random search metaheuristic to generate a set of duktape interpreters that can run your JavaScript, and which minimize the use of code footprint (of the interpreter), memory usage (of the javascript) and execution time.
+In this Readme file, as example, we assume that you have a javascript file called date-format-tofte.js (located on the iot subfolder), that you want to miniaturize to run on several constrained IoT devices.  For that purpose, you will execute one single run of hybrid random search metaheuristic to generate a set of duktape interpreters that can run your JavaScript, and which minimize the use of code footprint (of the interpreter), memory usage (of the javascript) and execution time.  
+
+Note that all the experiments where executed using Linux Fedora 28.
 
 
 ## Input Files
