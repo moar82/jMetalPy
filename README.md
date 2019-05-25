@@ -37,7 +37,7 @@ Note that all the experiments where executed using Linux Fedora 28.
 ## Input Files
 
 * A javascript file that we want to execute on constrained IoT device.
-In this example we use benchmark_date-fromat-tofte.js from [Sunspider testbed](https://webkit.org/perf/sunspider/sunspider.html)
+In this example we use date-fromat-tofte.js from [Sunspider testbed](https://webkit.org/perf/sunspider/sunspider.html)
 
 * A CSV file containing the median results measurements of executing the desired javascript program using duktape default measurements.  This is generated using python scripts explained on the [wiki](https://github.com/moar82/jMetalPy/wiki).  For our example, this is the file: 
  median_results_original_default_date-format-tofte.csv
@@ -54,12 +54,12 @@ These are the columns required for this file.
   * **category**: the category assigned by duktape.
   * **zero-index-base_id**: id -1
 
-* A CSV containing the mandatory features of the javascript file to execute.  for our example, the name is testbed_required_features.csv, which contains the following columns:
+* A CSV file containing the mandatory features of the javascript file to execute.  for our example, the name is testbed_required_features.csv, which contains the following columns:
   *  **Script**: the name of the javascript(s) to execute
   *  **RequiredFeaturesWithDefaulValue**: the mandatory features
   *  **RequiredFeaturesWithDefaulValueOriginal**: this field is not longer used.
   
-* A file with the hardware characteristics of the IoT constrained devices where you want to deploy your js interpreter.  it contains the following columns:
+* USR.csv: a CSV file with the hardware characteristics of the IoT constrained devices where you want to deploy your js interpreter.  it contains the following columns:
   * device_id
   * device_name:
   * memory_capacity:
