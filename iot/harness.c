@@ -50,9 +50,10 @@ duk_ret_t mod_search(duk_context *ctx) {
 	configuration config;
 
     if (ini_parse("module.ini", handler, &config) < 0) {
-        printf("Can't load 'module.ini'\n");
+        printf("WARNING: Can't load 'module.ini'\n");
         return 1;
     }
+	printf("INFO: 'module.ini' loaded\n");
 	char *src = NULL;
 	FILE *f   = NULL;
 	//const char *filename = "/home/moar82/benchmark/js_modules/numeral/en-gb.min.js";
@@ -64,7 +65,7 @@ duk_ret_t mod_search(duk_context *ctx) {
 	// Pull Arguments
 	char *id = duk_require_string(ctx, 0);
 
-	printf("ID => %s \n", id);
+	printf("INFO: Duktape stack idx 0 (ID) => %s \n", id);
 
 	/*char *result;
 	result = Search_in_File(argv[1], "require(");
@@ -74,9 +75,9 @@ duk_ret_t mod_search(duk_context *ctx) {
 	rc = strcmp(id, config.id);
 	if(rc == 0)
 	{
-	    printf("Module found, loading... \n");
+	    printf("INFO: Module ID from duktape stack matches module.ini id\n");
 	    // Read File and calculate its size (as DUKtape examples)
-	    printf("Loading... %s \n", filename);
+	    printf("INFO: Loading %s js module \n", filename);
 	    f = fopen(filename, "rb");
 	    fseek(f, 0, SEEK_END);
 	    len = (int) ftell(f);
@@ -157,14 +158,14 @@ int main(int argc, const char *argv[]) {
     	duk_push_c_function(ctx, native_print, DUK_VARARGS);
     	duk_put_prop_string(ctx, -2, "print");*/
 	
-	 	duk_module_duktape_init(ctx);
+	    duk_module_duktape_init(ctx);
 	    printf("top after init: %ld\n", (long) duk_get_top(ctx));
 	    modSearch_register(ctx);
 	    //push_file_as_string(ctx, "12.10-2-2.js");//here I should parametrize it with the name of the js file
-	    printf("llegue a cargar el js \n");
+	    printf("INFO: modSearch_register executed \n");
 	    push_file_as_string(ctx, argv[1]);//here I should parametrize it with the name of the js file
 	    if (duk_peval(ctx) != 0) {
-	        printf("Error: %s\n", duk_safe_to_string(ctx, -1));
+	        printf("Error evaluating js script: %s\n", duk_safe_to_string(ctx, -1));
 	        goto finished;
 	    }
 	    duk_pop(ctx);  /* ignore result */
@@ -177,7 +178,7 @@ int main(int argc, const char *argv[]) {
 	    	printf("js function name provided %s \n", argv[2]);
           //    duk_push_string(ctx, line);
 	    	if (duk_pcall(ctx, 0 /*nargs*/) != 0) {
-	        	printf("Error: %s\n", duk_safe_to_string(ctx, -1));
+	        	printf("Error executing JS function: %s\n", duk_safe_to_string(ctx, -1));
 	            } 
 	    	/*else {
 	                printf("%s\n", duk_safe_to_string(ctx, -1));
