@@ -162,10 +162,10 @@ class JSEngineHelper ():
                 asolution[7] = False
                 asolution[8] = False
                 asolution[9] = True
-
-        # f14 requires f11 to be disable too (one-index-based)
-        if asolution[13]==False:
-            asolution[10]=False
+        # f14 and f11  require to have the same values
+        if (asolution[13] & asolution[10]) == False:
+            asolution[13] = False
+            asolution[10] = False
         # f27 requires f26 to be disable too (one-index-based)
         if asolution[26]==False:
             asolution[25]=False
