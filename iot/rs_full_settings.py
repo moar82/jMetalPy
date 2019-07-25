@@ -12,9 +12,12 @@ if __name__ == '__main__':
         sys.exit(1)
     else:
         problem.run_id = '_' + sys.argv[1] # we use this value to name the solution output
-    problem.repair_solution = False
+    problem.repair_solution = True
     problem.algo_name = 'RS'
     problem.script = sys.argv[2]  # we parametrize the script
+    print('Executing Random Search with repair solution function %s ' % problem.repair_solution)
+    problem.sf.plog.logError(
+        'Executing Random Search with repair solution function ' + str(problem.repair_solution) + '\n')
     algorithm = RandomSearch(
         problem=problem,
         max_evaluations=250
@@ -52,10 +55,9 @@ if __name__ == '__main__':
     ## print('Computing time: ' + str(algorithm.total_computing_time)) not implemented in rs algorithm
     problem.save_values_achieved(front, 'values_achieved_RS_' + problem.script.split('.')[0] + problem.run_id.replace('_',
                                                                                                                    '') + '.csv')
-
+    problem.sf.plog.logError('Run: ' + problem.run_id.replace('_', '') + ' js script: ' + problem.script + '\n')
     problem.sf.plog.logError('Run: ' + problem.run_id.replace('_','') + ' js script: ' + problem.script + '\n')
     ##problem.sf.plog.logError('Computing time: ' + str(algorithm.total_computing_time)+ '\n')
-    problem.sf.plog.logError('Evaluated solutions:'+str(len(problem.sf.js_engine_helper.tested_solutions))+'\n')
     with open("TIME.RS." + problem.script + '.' +problem.run_id.replace('_','')  + '.' + problem.get_name(), 'w') as f:
         f.write('Computing time (seconds): ' + str(algorithm.total_computing_time) + '\n')
     print ('Computing time (seconds): ' + str(algorithm.total_computing_time))
