@@ -251,9 +251,9 @@ class JSEngineHelper ():
                            self.cwd + '/duktape-src/' + self.bc.idf + self.run_id + ' --option-file '  + fileoutname)
             ###Copy the source code, since I have problems when compiling when the headers are in a different dir
             ###Now the next step is to compile the code
-            os.system('cp -f ' + self.cwd + '/{' + self.bc.program + '.c,' + self.bc.script + '} ' + self.cwd + '/duktape-src/' + self.bc.idf + self.run_id + '/')
+            os.system('cp -f ' + self.cwd + '/{' + self.bc.program + '.c,' + self.bc.script + ',duk_module_duktape.c,duk_module_duktape.h,ini.h,ini.c,module.ini} ' + self.cwd + '/duktape-src/' + self.bc.idf + self.run_id + '/')
             os.chdir(self.cwd + '/duktape-src/' + self.bc.idf + self.run_id + '/')
-            compileSucc = self.get_out('gcc', '-std=c99', '-o',  self.bc.program , '-Iduktape-src' , 'duktape.c' , self.bc.program +
+            compileSucc = self.get_out('gcc', '-std=c99', '-o',  self.bc.program , '-Iduktape-src' , 'duktape.c' , 'duk_module_duktape.c' , 'ini.c' , self.bc.program +
                                        '.c' , '-lm')
             if compileSucc[0] == 0:
                 ####Now let's measure the size of the file
