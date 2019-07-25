@@ -1,6 +1,7 @@
 import configparser
 import math
 import os, csv, subprocess, datetime, time
+import sys
 from tempfile import TemporaryFile
 from collections import deque
 from random import random
@@ -293,6 +294,7 @@ class JSEngineHelper ():
                         #st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
                         self.plog.logError(str(ts) +" When executing program: " + self.bc.program + ". configuration file: " + fileoutname + ". errorMsg: " +
                                            coltemp[0].replace("\"", "").strip() + "\n")
+                        #sys.exit() just for debug purpose
                         ppm.memory_us.append  (float('inf'))
                         '''back up defective yaml file for further analysis '''
                         os.system('cp ' + fileoutname + ' ' + fileoutname + '.' + str(ts) + '.execution_error')

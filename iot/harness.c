@@ -76,6 +76,7 @@ duk_ret_t mod_search(duk_context *ctx) {
 	{
 	    printf("Module found, loading... \n");
 	    // Read File and calculate its size (as DUKtape examples)
+	    printf("Loading... %s \n", filename);
 	    f = fopen(filename, "rb");
 	    fseek(f, 0, SEEK_END);
 	    len = (int) ftell(f);
@@ -160,6 +161,7 @@ int main(int argc, const char *argv[]) {
 	    printf("top after init: %ld\n", (long) duk_get_top(ctx));
 	    modSearch_register(ctx);
 	    //push_file_as_string(ctx, "12.10-2-2.js");//here I should parametrize it with the name of the js file
+	    printf("llegue a cargar el js \n");
 	    push_file_as_string(ctx, argv[1]);//here I should parametrize it with the name of the js file
 	    if (duk_peval(ctx) != 0) {
 	        printf("Error: %s\n", duk_safe_to_string(ctx, -1));
