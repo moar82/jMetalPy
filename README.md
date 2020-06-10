@@ -42,7 +42,7 @@ In this example we use date-fromat-tofte.js from [Sunspider testbed](https://web
 * A CSV file containing the median results measurements of executing the desired javascript program using duktape default measurements.  This is generated using python scripts explained on the [wiki](https://github.com/moar82/jMetalPy/wiki).  For our example, this is the file: 
  median_results_original_default_date-format-tofte.csv
  
-* Config.ini.  This file provides the basic configuration parameters of our framework, including the path to the Duktape installation, the file with the test features, name of the harness file, jsfunction to execute (if any), etc.  More information on the [wiki](https://github.com/moar82/jMetalPy/wiki).
+* config.ini.  This file provides the basic configuration parameters of our framework, including the path to the Duktape installation, the file with the test features, name of the harness file, jsfunction to execute (if any), etc.  More information on the [wiki](https://github.com/moar82/jMetalPy/wiki).
 
 * confOpt.csv file.  This file contains the Duktape code features that we want to combine.
 These are the columns required for this file.
@@ -127,6 +127,8 @@ The current release of MoMITPy  contains the following components:
 ## Research
 MoMITPy is the product of research at Concordia University in Montreal Canada in the Ptidej Lab.
 If you want to use out tool, please cite the following paper:
+
+[R. Morales, R. Saborido and Y. Guéhéneuc, "MoMIT: Porting a JavaScript Interpreter on a Quarter Coin," in IEEE Transactions on Software Engineering, doi: 10.1109/TSE.2020.2968061.](https://moar82.github.io/myPapers/MoMIT__Porting_a_JavaScript_Interpreter_on_a_Quarter_Coin.pdf)
 
 For a complete list of works please visit my [personal web site](https://moar82.github.io/#portfolio)
 
